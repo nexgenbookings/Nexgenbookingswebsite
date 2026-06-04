@@ -148,6 +148,14 @@ nav.scrolled,nav.page-nav{
   background:rgba(255,255,255,.98);
   box-shadow:0 1px 0 var(--border);
 }
+/* Internal pages at top: transparent with color logo */
+nav.inner-top .nav-links a{color:rgba(255,255,255,.8)}
+nav.inner-top .nav-links a:hover,nav.inner-top .nav-links a.active{color:#fff;opacity:1}
+nav.inner-top .nav-book{color:#fff;border-color:rgba(255,255,255,.4)}
+nav.inner-top .nav-book:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.65)}
+nav.inner-top .hamburger span{background:#fff}
+nav.inner-top .nav-logo img.logo-color{display:block}
+nav.inner-top .nav-logo img.logo-white{display:none}
 .nav-logo img{height:40px;transition:height .35s;display:block}
 .nav-logo img.logo-color{}
 .nav-logo img.logo-white{display:none}
@@ -417,7 +425,7 @@ footer{
   border-bottom:1px solid rgba(255,255,255,.07);
   margin-bottom:28px;
 }
-.footer-brand img{height:52px;margin-bottom:18px;opacity:.85}
+.footer-brand img{height:68px;margin-bottom:18px;opacity:1;mix-blend-mode:normal}
 .footer-brand p{font-size:.82rem;line-height:1.82;max-width:260px;font-weight:300}
 .footer-col h4{
   font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
@@ -1045,7 +1053,7 @@ footer{
     <div class="footer-inner">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/>
+          <img src="nexgen-logo-square.png" alt="NexGen Bookings"/>
           <p>Kosher travel concierge for the modern Jewish traveller. Every trip built from scratch, by people who've been there.</p>
         </div>
         <div class="footer-col">
@@ -1178,7 +1186,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1249,7 +1257,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1339,7 +1347,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1368,7 +1376,7 @@ footer{
       <div class="contact-dark-content">
         <h2 class="sr up">A question, a trip idea,<br>or just <em>a starting point.</em></h2>
         <div>
-          <p class="sr up d1">Whether you have a specific trip in mind or just want to understand whether we're right for you, reach out. No obligation. Honest conversation.</p>
+          <p class="sr up d1" style="color:rgba(255,255,255,.82)">Whether you have a specific trip in mind or just want to understand whether we're right for you, reach out. No obligation. Honest conversation.</p>
           <div class="contact-methods">
             <div class="c-method sr up d2"><strong>Email</strong><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></div>
             <div class="c-method sr up d3"><strong>Phone</strong><a href="tel:+15167245435">+1 (516) 724-5435</a></div>
@@ -1401,7 +1409,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1444,7 +1452,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1474,7 +1482,7 @@ footer{
   </section>
   <footer>
     <div class="footer-inner">
-      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
       <div class="footer-bottom"><span>© 2026 Nexgen Bookings LLC</span></div>
     </div>
   </footer>
@@ -1500,7 +1508,7 @@ footer{
   </section>
   <footer>
     <div class="footer-inner">
-      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
       <div class="footer-bottom"><span>© 2026 Nexgen Bookings LLC</span></div>
     </div>
   </footer>
@@ -1536,20 +1544,24 @@ function showPage(name) {
 /* ── NAV ── */
 function updateNav() {
   const nav = document.getElementById('nav');
-  nav.classList.remove('scrolled','hero-nav','page-nav');
+  nav.classList.remove('scrolled','hero-nav','page-nav','inner-top');
   if (cur === 'home') {
     if (window.scrollY > 60) nav.classList.add('scrolled');
     else nav.classList.add('hero-nav');
   } else {
-    nav.classList.add('page-nav');
+    if (window.scrollY > 60) nav.classList.add('page-nav');
+    else nav.classList.add('inner-top');
   }
 }
 
 window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
   if (cur === 'home') {
-    const nav = document.getElementById('nav');
     if (window.scrollY > 60) { nav.classList.remove('hero-nav'); nav.classList.add('scrolled'); }
     else { nav.classList.remove('scrolled'); nav.classList.add('hero-nav'); }
+  } else {
+    if (window.scrollY > 60) { nav.classList.remove('inner-top'); nav.classList.add('page-nav'); }
+    else { nav.classList.remove('page-nav'); nav.classList.add('inner-top'); }
   }
   document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
 }, { passive: true });

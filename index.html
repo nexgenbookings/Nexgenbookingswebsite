@@ -154,9 +154,10 @@ nav.on-dark{
   padding:14px 48px;
   background:rgba(12,27,64,.96);
 }
-.nav-logo img{height:40px;transition:height .35s,filter .35s;display:block}
+.nav-logo img{height:40px;transition:height .35s,filter .35s;display:block;mix-blend-mode:multiply}
 nav.scrolled .nav-logo img{height:32px}
-nav.on-dark .nav-logo img{filter:brightness(0) invert(1) opacity(.9);height:32px}
+nav.on-dark .nav-logo img{filter:brightness(0) invert(1) opacity(.9);height:32px;mix-blend-mode:normal}
+nav:not(.scrolled):not(.on-dark) .nav-logo img{filter:brightness(0) invert(1) opacity(.9);mix-blend-mode:normal}
 
 .nav-links{display:flex;align-items:center;gap:36px}
 .nav-links a{

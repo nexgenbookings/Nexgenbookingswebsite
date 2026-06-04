@@ -45,23 +45,24 @@ button{font-family:inherit;cursor:pointer}
   position:fixed;inset:0;z-index:9999;pointer-events:none;
   background:var(--navy);
   clip-path:inset(0 100% 0 0);
-  transition:clip-path .5s cubic-bezier(.76,0,.24,1);
+  transition:clip-path .28s cubic-bezier(.76,0,.24,1);
 }
 #pt.in{clip-path:inset(0 0% 0 0);pointer-events:all}
 #pt.out{clip-path:inset(0 0 0 100%)}
 
 /* ── SCROLL REVEAL ── */
 .sr{
-  opacity:0;transform:translateY(24px);
-  transition:opacity .85s cubic-bezier(.22,1,.36,1),
-             transform .85s cubic-bezier(.22,1,.36,1);
+  opacity:0;transform:translateY(14px);
+  transition:opacity .55s cubic-bezier(.22,1,.36,1),
+             transform .55s cubic-bezier(.22,1,.36,1);
 }
-.sr.left{transform:translateX(-24px)}
-.sr.right{transform:translateX(24px)}
+.sr.left{transform:translateX(-14px)}
+.sr.right{transform:translateX(14px)}
 .sr.fade{transform:none}
 .sr.visible{opacity:1;transform:none}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}
-.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+.d1{transition-delay:.06s}.d2{transition-delay:.12s}
+.d3{transition-delay:.18s}.d4{transition-delay:.24s}
+.d5{transition-delay:.3s}
 
 /* ── NAV ── */
 nav{
@@ -298,9 +299,7 @@ nav.on-dark .hamburger span{background:#fff}
 .dest-city-label{
   font-size:.68rem;font-weight:600;letter-spacing:.16em;
   text-transform:uppercase;color:rgba(255,255,255,.3);
-  display:flex;align-items:center;gap:10px;
 }
-.dest-city-label::before{content:'';width:16px;height:1px;background:rgba(255,255,255,.25)}
 .dest-feature-body h3{
   font-family:'EB Garamond',serif;
   font-size:clamp(2rem,4vw,3.8rem);
@@ -618,11 +617,9 @@ footer{
   border-right:1px solid var(--warm-rule);
   border-bottom:1px solid var(--warm-rule);
   overflow:hidden;cursor:pointer;
-  transition:background .25s;
 }
 .dest-pg-card:nth-child(3n){border-right:none}
-.dest-pg-card:hover{background:var(--parchment)}
-.dest-pg-img{height:200px;overflow:hidden}
+.dest-pg-img{height:240px;overflow:hidden}
 .dest-pg-img img{
   width:100%;height:100%;object-fit:cover;
   transition:transform .65s cubic-bezier(.4,0,.2,1);
@@ -653,35 +650,37 @@ footer{
 .hiw-body{padding:80px 56px;max-width:860px;margin:0 auto}
 .hiw-steps{border-top:1px solid var(--warm-rule)}
 .hiw-step{
-  display:grid;grid-template-columns:72px 1fr;
-  gap:32px;padding:44px 0;
+  display:grid;grid-template-columns:140px 1fr;
+  gap:0;padding:48px 0;
   border-bottom:1px solid var(--warm-rule);align-items:baseline;
 }
 .hiw-step:last-child{border-bottom:none}
 .hiw-num{
-  font-family:'EB Garamond',serif;font-size:3.2rem;
-  font-weight:400;color:var(--warm-rule-strong);
-  line-height:1;transition:color .3s;
+  font-size:.65rem;font-weight:700;letter-spacing:.14em;
+  color:var(--stone);text-transform:uppercase;padding-top:3px;
 }
-.hiw-step:hover .hiw-num{color:var(--ink)}
-.hiw-content h3{font-size:.95rem;font-weight:600;margin-bottom:10px}
-.hiw-content p{font-size:.88rem;line-height:1.8;color:var(--stone);font-weight:300}
+.hiw-content h3{
+  font-family:'EB Garamond',serif;
+  font-size:1.2rem;font-weight:400;
+  letter-spacing:-.01em;margin-bottom:10px;color:var(--ink);
+}
+.hiw-content p{font-size:.88rem;line-height:1.82;color:var(--stone);font-weight:300}
 .hiw-why{
-  margin-top:72px;padding:44px;
-  border:1px solid var(--warm-rule);background:var(--parchment);
+  margin-top:72px;padding:48px 0;
+  border-top:1px solid var(--warm-rule);
 }
 .hiw-why h3{
-  font-family:'EB Garamond',serif;font-size:1.5rem;
-  font-weight:400;margin-bottom:24px;
+  font-family:'EB Garamond',serif;font-size:1.4rem;
+  font-weight:400;margin-bottom:28px;letter-spacing:-.01em;
 }
-.why-list{list-style:none;display:flex;flex-direction:column;gap:14px}
+.why-list{list-style:none;display:flex;flex-direction:column;gap:16px}
 .why-list li{
-  display:flex;align-items:flex-start;gap:12px;
-  font-size:.87rem;line-height:1.72;color:var(--stone);font-weight:300;
+  display:flex;align-items:flex-start;gap:16px;
+  font-size:.88rem;line-height:1.75;color:var(--stone);font-weight:300;
 }
 .why-check{
-  font-size:.78rem;color:var(--stone);flex-shrink:0;margin-top:3px;
-  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:.72rem;color:var(--stone);flex-shrink:0;margin-top:3px;
+  font-family:'EB Garamond',serif;font-style:italic;letter-spacing:.02em;
 }
 
 /* CONTACT PAGE */
@@ -706,7 +705,7 @@ footer{
   text-transform:uppercase;color:var(--stone);margin-bottom:4px;
 }
 .c-method a,.c-method span{font-size:.9rem;color:var(--ink)}
-.c-method a:hover{color:var(--cyan)}
+.c-method a:hover{color:var(--navy)}
 .contact-form-wrap{padding:80px 56px}
 
 /* BOOKING PAGE */
@@ -830,6 +829,7 @@ footer{
   .dest-pg-card:nth-child(2n+1){border-right:1px solid var(--warm-rule)}
   .dest-pg-card:nth-child(2n){border-right:none}
   .hiw-body,.booking-body,.legal-body,.contact-info,.contact-form-wrap{padding:56px 28px}
+  .hiw-step{grid-template-columns:1fr;gap:10px;padding:36px 0}
   .contact-body{grid-template-columns:1fr}
   .contact-info{border-right:none;border-bottom:1px solid var(--warm-rule)}
   .form-row{grid-template-columns:1fr}
@@ -906,10 +906,9 @@ footer{
     </div>
 
     <div class="hero-img-strip" style="margin-top:52px">
-      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1800&q=85"
-           alt="A beautifully set table — the kind we arrange at every destination"/>
+      <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1800&q=85"
+           alt="Paris at golden hour — one of eighteen destinations we know well"/>
     </div>
-    <p class="hero-img-credit">Every detail arranged. Every destination handled.</p>
   </section>
 
   <!-- THE KNOWLEDGE -->
@@ -926,9 +925,9 @@ footer{
       </div>
     </div>
     <div class="knowledge-right">
-      <p class="sr fade d1">"We know which neighbourhood in Paris puts you within Shabbat walking distance of La Victoire — and which boutique hotels on that street actually understand what that means."</p>
-      <p class="sr fade d2">"In Dubai, we know the hotel that has a mezuzah on the door. We know because we asked."</p>
-      <p class="sr fade d3">"Rome's Jewish quarter has been welcoming travellers for 2,000 years. We know which restaurants in it are worth your time, and which are coasting on the address."</p>
+      <p class="sr fade d1">&#x201C;We know which neighbourhood in Paris puts you within Shabbat walking distance of La Victoire &#x2014; and which boutique hotels on that street actually understand what that means.&#x201D;</p>
+      <p class="sr fade d2">&#x201C;In Dubai, we know the hotel that has a mezuzah on the door. We know because we asked.&#x201D;</p>
+      <p class="sr fade d3">&#x201C;Rome&#x2019;s Jewish quarter has been welcoming travellers for 2,000 years. We know which restaurants in it are worth your time, and which are coasting on the address.&#x201D;</p>
     </div>
   </section>
 
@@ -946,7 +945,7 @@ footer{
       </div>
       <div class="dest-feature-body sr up">
         <div>
-          <div class="dest-city-label">Featured Destination · Europe</div>
+          <div class="dest-city-label">Europe · Italy</div>
           <h3>Rome</h3>
           <p>The Jewish community here is one of the oldest in the world. The Ghetto Ebraico has been continuously inhabited since the 2nd century BC. We know which restaurants are worth the reservation, which are tourist traps, and which shul has the best kiddush on Shabbat morning.</p>
         </div>
@@ -996,7 +995,7 @@ footer{
   <section class="process">
     <div class="process-header">
       <h2 class="sr up">From first message<br>to boarding pass —<br><em>we handle it.</em></h2>
-      <p class="sr right">Five steps. One point of contact. No call centres. No packages. Every decision explained before anything is booked.</p>
+      <p class="sr right">One point of contact handles everything from the first message to your boarding pass. Nothing is booked until you approve it.</p>
     </div>
     <div class="process-steps">
       <div class="process-step sr up d1">
@@ -1211,14 +1210,14 @@ footer{
   </div>
 
   <div class="dest-page-grid" id="destGrid">
-    <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=700&q=80" alt="Paris"/></div><div class="dest-pg-body"><div class="region">Europe · France</div><h3>Paris</h3><p>The Marais. La Victoire. Shabbat within walking distance. September is the month.</p><div class="dest-pg-tags"><span class="dpt">Couples</span><span class="dpt">Family</span><span class="dpt">Kosher Dining</span></div></div></div>
-    <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=700&q=80" alt="Rome"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Rome</h3><p>The oldest ghetto in Europe. Remarkable history, remarkable food. Book early.</p><div class="dest-pg-tags"><span class="dpt">History</span><span class="dpt">Culture</span><span class="dpt">Family</span></div></div></div>
-    <div class="dest-pg-card sr up d2" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=700&q=80" alt="Venice"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Venice</h3><p>The Ghetto Novo, founded 1516. For special occasions. Unique in the world.</p><div class="dest-pg-tags"><span class="dpt">Honeymoon</span><span class="dpt">Special Occasions</span></div></div></div>
-    <div class="dest-pg-card sr up" data-region="mideast" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80" alt="Dubai"/></div><div class="dest-pg-body"><div class="region">Middle East · UAE</div><h3>Dubai</h3><p>Since normalisation, genuinely excellent kosher options. Friday afternoons need planning.</p><div class="dest-pg-tags"><span class="dpt">Luxury</span><span class="dpt">Premium</span></div></div></div>
-    <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Cyprus"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Cyprus</div><h3>Paphos</h3><p>A relaxed coastal escape. Easy from Israel. Good for a long weekend.</p><div class="dest-pg-tags"><span class="dpt">Beach</span><span class="dpt">Weekend</span></div></div></div>
-    <div class="dest-pg-card sr up d2" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=700&q=80" alt="Panama"/></div><div class="dest-pg-body"><div class="region">Americas · Panama</div><h3>Panama City</h3><p>A surprisingly strong Jewish community and kosher infrastructure. Genuinely different.</p><div class="dest-pg-tags"><span class="dpt">Adventure</span><span class="dpt">Culture</span></div></div></div>
-    <div class="dest-pg-card sr up" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=700&q=80" alt="Cancun"/></div><div class="dest-pg-body"><div class="region">Caribbean · Mexico</div><h3>Cancún</h3><p>Resorts that work with kosher caterers. White sand. Useful for families.</p><div class="dest-pg-tags"><span class="dpt">Beach</span><span class="dpt">Resort</span><span class="dpt">Family</span></div></div></div>
-    <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80" alt="Milan"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Milan</h3><p>Fashion, design, and an underrated Jewish community. The Duomo and then dinner.</p><div class="dest-pg-tags"><span class="dpt">Fashion</span><span class="dpt">Culture</span></div></div></div>
+    <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=700&q=80" alt="Paris"/></div><div class="dest-pg-body"><div class="region">Europe · France</div><h3>Paris</h3><p>The Marais. La Victoire. Shabbat within walking distance. September is the month.</p></div></div>
+    <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=700&q=80" alt="Rome"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Rome</h3><p>The oldest ghetto in Europe. Remarkable history, remarkable food. Book early.</p></div></div>
+    <div class="dest-pg-card sr up d2" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=700&q=80" alt="Venice"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Venice</h3><p>The Ghetto Novo, founded 1516. For special occasions. Unique in the world.</p></div></div>
+    <div class="dest-pg-card sr up" data-region="mideast" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80" alt="Dubai"/></div><div class="dest-pg-body"><div class="region">Middle East · UAE</div><h3>Dubai</h3><p>Since normalisation, genuinely excellent kosher options. Friday afternoons need planning.</p></div></div>
+    <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Cyprus"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Cyprus</div><h3>Paphos</h3><p>A relaxed coastal escape. Easy from Israel. Good for a long weekend.</p></div></div>
+    <div class="dest-pg-card sr up d2" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=700&q=80" alt="Panama"/></div><div class="dest-pg-body"><div class="region">Americas · Panama</div><h3>Panama City</h3><p>A surprisingly strong Jewish community and kosher infrastructure. Genuinely different.</p></div></div>
+    <div class="dest-pg-card sr up" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=700&q=80" alt="Cancun"/></div><div class="dest-pg-body"><div class="region">Caribbean · Mexico</div><h3>Cancún</h3><p>Resorts that work with kosher caterers. White sand. Useful for families.</p></div></div>
+    <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80" alt="Milan"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Milan</h3><p>Fashion, design, and an underrated Jewish community. The Duomo and then dinner.</p></div></div>
   </div>
 
   <div class="home-cta sr fade">
@@ -1249,11 +1248,11 @@ footer{
 
   <div class="hiw-body">
     <div class="hiw-steps">
-      <div class="hiw-step sr up"><div class="hiw-num">1</div><div class="hiw-content"><h3>You share your travel details</h3><p>Destination, dates, group size, budget, kosher requirements, and anything specific — special occasions, accessibility needs, neighbourhoods you want to be near. We ask the questions a good travel adviser asks.</p></div></div>
-      <div class="hiw-step sr up d1"><div class="hiw-num">2</div><div class="hiw-content"><h3>We build your itinerary</h3><p>A real person researches and curates your trip — flights, hotels, kosher dining, transfers, and logistics. We build it around your preferences, not around what's easiest for us to book.</p></div></div>
-      <div class="hiw-step sr up d2"><div class="hiw-num">3</div><div class="hiw-content"><h3>You review everything</h3><p>We send a full proposal. You review it. We adjust until every detail is right. Nothing is booked until you say so — and every decision is explained.</p></div></div>
-      <div class="hiw-step sr up d3"><div class="hiw-num">4</div><div class="hiw-content"><h3>We handle all the bookings</h3><p>Once approved, we manage every reservation — flights, hotels, transfers, restaurants, and any special arrangements. You don't need to do anything except pack.</p></div></div>
-      <div class="hiw-step sr up d4"><div class="hiw-num">5</div><div class="hiw-content"><h3>Your digital itinerary arrives</h3><p>A clean digital brief with every confirmation, address, and detail — organised and accessible from your phone before and during the trip. Clients reference it constantly.</p></div></div>
+      <div class="hiw-step sr up"><div class="hiw-num">Step 01</div><div class="hiw-content"><h3>You share your travel details</h3><p>Destination, dates, group size, budget, kosher requirements, and anything specific — special occasions, accessibility needs, neighbourhoods you want to be near. We ask the questions a good travel adviser asks.</p></div></div>
+      <div class="hiw-step sr up d1"><div class="hiw-num">Step 02</div><div class="hiw-content"><h3>We build your itinerary</h3><p>A real person researches and curates your trip — flights, hotels, kosher dining, transfers, and logistics. We build it around your preferences, not around what's easiest for us to book.</p></div></div>
+      <div class="hiw-step sr up d2"><div class="hiw-num">Step 03</div><div class="hiw-content"><h3>You review everything</h3><p>We send a full proposal. You review it. We adjust until every detail is right. Nothing is booked until you say so — and every decision is explained.</p></div></div>
+      <div class="hiw-step sr up d3"><div class="hiw-num">Step 04</div><div class="hiw-content"><h3>We handle all the bookings</h3><p>Once approved, we manage every reservation — flights, hotels, transfers, restaurants, and any special arrangements. You don't need to do anything except pack.</p></div></div>
+      <div class="hiw-step sr up d4"><div class="hiw-num">Step 05</div><div class="hiw-content"><h3>Your digital itinerary arrives</h3><p>A clean digital brief with every confirmation, address, and detail — organised and accessible from your phone before and during the trip. Clients reference it constantly.</p></div></div>
     </div>
 
     <div class="hiw-why sr up">
@@ -1293,7 +1292,7 @@ footer{
   <div class="contact-body">
     <div class="contact-info">
       <div style="font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--stone);margin-bottom:28px" class="sr fade">Contact</div>
-      <h2 class="sr up">We're here<br>to <em>help.</em></h2>
+      <h2 class="sr up">A question, a trip idea,<br>or just <em>a starting point.</em></h2>
       <p class="sr up d1">Whether you have a specific trip in mind or just want to understand whether we're right for you, reach out. No obligation. Honest conversation.</p>
       <div class="contact-methods">
         <div class="c-method sr up d2"><strong>Email</strong><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></div>
@@ -1400,9 +1399,8 @@ footer{
       </div>
     </div>
     <div class="form-success" id="bookingSuccess" style="display:none">
-      <div class="form-success-icon">✈️</div>
-      <h3>We've got your request.</h3>
-      <p>We'll review your details and be in touch within 24 hours with a personalised proposal.</p>
+      <p style="font-family:'EB Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--ink);margin-bottom:12px">Request received.</p>
+      <p style="font-size:.88rem;color:var(--stone);line-height:1.78;font-weight:300">We&#x2019;ll review your details and come back to you within 24 hours with a personalised proposal.</p>
     </div>
   </div>
 
@@ -1468,7 +1466,7 @@ function showPage(name) {
   busy = true;
   const pt = document.getElementById('pt');
   pt.classList.add('in');
-  setTimeout(() => {
+  setTimeout(() => { // 280ms
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('[id^="nav-"]').forEach(a => a.classList.remove('active'));
     const page = document.getElementById('page-' + name);
@@ -1481,8 +1479,8 @@ function showPage(name) {
     initTilt();
     pt.classList.remove('in');
     pt.classList.add('out');
-    setTimeout(() => { pt.classList.remove('out'); busy = false; }, 520);
-  }, 500);
+    setTimeout(() => { pt.classList.remove('out'); busy = false; }, 300);
+  }, 280);
 }
 
 /* ── NAV ── */

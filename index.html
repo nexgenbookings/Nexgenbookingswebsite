@@ -12,16 +12,17 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --navy:#0c1b40;
-  --navy-mid:#1a3060;
+  --navy:#1a3a6b;
+  --navy-mid:#2a4d82;
+  --navy-dark:#0c1b40;
   --white:#ffffff;
-  --off-white:#f8fafc;
-  --border:#e2e8f0;
-  --text:#0f172a;
-  --muted:#64748b;
+  --off-white:#f5f7fa;
+  --border:#dde3ed;
+  --text:#1a2540;
+  --muted:#6b7a99;
   --radius:10px;
-  --shadow:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.07);
-  --shadow-lg:0 4px 8px rgba(0,0,0,.08),0 16px 40px rgba(0,0,0,.12);
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:0 4px 8px rgba(0,0,0,.07),0 16px 40px rgba(0,0,0,.10);
 }
 
 html{scroll-behavior:smooth}
@@ -136,32 +137,25 @@ nav{
   padding:24px 48px;
   transition:padding .35s ease,background .35s ease,box-shadow .35s ease;
 }
-/* transparent over hero — white text */
-nav:not(.scrolled):not(.on-dark) .nav-links a{color:rgba(255,255,255,.8)}
-nav:not(.scrolled):not(.on-dark) .nav-links a:hover,
-nav:not(.scrolled):not(.on-dark) .nav-links a.active{color:#fff;opacity:1}
-nav:not(.scrolled):not(.on-dark) .nav-book{color:#fff;border-color:rgba(255,255,255,.4)}
-nav:not(.scrolled):not(.on-dark) .nav-book:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.65)}
-nav:not(.scrolled):not(.on-dark) .hamburger span{background:#fff}
-nav:not(.scrolled):not(.on-dark) .nav-logo img{filter:brightness(0) invert(1) opacity(.9)}
+/* Hero only: transparent with white text */
+nav.hero-nav .nav-links a{color:rgba(255,255,255,.8)}
+nav.hero-nav .nav-links a:hover,nav.hero-nav .nav-links a.active{color:#fff;opacity:1}
+nav.hero-nav .nav-book{color:#fff;border-color:rgba(255,255,255,.4)}
+nav.hero-nav .nav-book:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.65)}
+nav.hero-nav .hamburger span{background:#fff}
 
-nav.scrolled{
+nav.scrolled,nav.page-nav{
   padding:14px 48px;
-  background:rgba(255,255,255,.97);
+  background:rgba(255,255,255,.98);
   box-shadow:0 1px 0 var(--border);
-}
-nav.on-dark{
-  padding:14px 48px;
-  background:rgba(12,27,64,.96);
 }
 .nav-logo img{height:40px;transition:height .35s;display:block}
 .nav-logo img.logo-color{mix-blend-mode:multiply}
 .nav-logo img.logo-white{display:none}
-nav.scrolled .nav-logo img{height:32px}
-nav.on-dark .nav-logo img.logo-color,
-nav:not(.scrolled):not(.on-dark) .nav-logo img.logo-color{display:none}
-nav.on-dark .nav-logo img.logo-white,
-nav:not(.scrolled):not(.on-dark) .nav-logo img.logo-white{display:block;height:32px;opacity:.9}
+nav.scrolled .nav-logo img,nav.page-nav .nav-logo img{height:32px}
+/* Hero only — show white logo */
+nav.hero-nav .nav-logo img.logo-color{display:none}
+nav.hero-nav .nav-logo img.logo-white{display:block;opacity:.9}
 
 .nav-links{display:flex;align-items:center;gap:36px}
 .nav-links a{
@@ -170,8 +164,6 @@ nav:not(.scrolled):not(.on-dark) .nav-logo img.logo-white{display:block;height:3
 }
 .nav-links a:hover,.nav-links a.active{opacity:1}
 .nav-links a.active{font-weight:600}
-nav.on-dark .nav-links a{color:rgba(255,255,255,.65)}
-nav.on-dark .nav-links a:hover,nav.on-dark .nav-links a.active{color:#fff;opacity:1}
 
 .nav-book{
   font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
@@ -179,22 +171,19 @@ nav.on-dark .nav-links a:hover,nav.on-dark .nav-links a.active{color:#fff;opacit
   padding:9px 22px;border-radius:7px;transition:background .2s,color .2s,border-color .2s;cursor:pointer;
 }
 .nav-book:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
-nav.on-dark .nav-book{color:#fff;border-color:rgba(255,255,255,.3)}
-nav.on-dark .nav-book:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.5)}
 
 .hamburger{
   display:none;flex-direction:column;gap:5px;
   cursor:pointer;padding:4px;background:none;border:none;
 }
 .hamburger span{width:22px;height:1.5px;background:var(--text);transition:all .3s;border-radius:1px;display:block}
-nav.on-dark .hamburger span{background:#fff}
 .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0}
 .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 .mob-menu{
   display:none;position:fixed;inset:0;z-index:99;
-  background:var(--navy);flex-direction:column;
+  background:var(--navy-dark);flex-direction:column;
   align-items:center;justify-content:center;gap:36px;
   opacity:0;transition:opacity .3s;
 }
@@ -393,7 +382,7 @@ nav.on-dark .hamburger span{background:#fff}
    CTA BANNER
 ───────────────────────────────*/
 .cta-banner{
-  background:var(--navy);padding:96px 0;text-align:center;
+  background:var(--navy-dark);padding:96px 0;text-align:center;
 }
 .cta-banner h2{
   font-family:'EB Garamond',serif;
@@ -408,7 +397,7 @@ nav.on-dark .hamburger span{background:#fff}
    FOOTER
 ───────────────────────────────*/
 footer{
-  background:#070f24;color:rgba(255,255,255,.4);
+  background:#0c1b40;color:rgba(255,255,255,.45);
   padding:72px 0 40px;
 }
 .footer-inner{max-width:1200px;margin:0 auto;padding:0 48px}
@@ -436,15 +425,15 @@ footer{
    INTERNAL PAGE HEADER
 ───────────────────────────────*/
 .pg-header{
-  padding:160px 48px 88px;
-  background:var(--navy);
+  padding:140px 48px 80px;
+  background:var(--navy-dark);
   border-bottom:1px solid rgba(255,255,255,.06);
   position:relative;overflow:hidden;
 }
 .pg-header-bg{
   position:absolute;inset:0;
   background-size:cover;background-position:center;
-  opacity:.18;
+  opacity:.28;
   transition:transform 8s ease;
 }
 .pg-header:hover .pg-header-bg{transform:scale(1.04)}
@@ -468,7 +457,7 @@ footer{
    STATS BAR
 ───────────────────────────────*/
 .stats-bar{
-  background:var(--navy);padding:0;
+  background:var(--navy-dark);padding:0;
   border-bottom:1px solid rgba(255,255,255,.07);
 }
 .stats-bar-inner{
@@ -524,7 +513,7 @@ footer{
   display:grid;grid-template-columns:1fr 1fr;min-height:600px;
 }
 .contact-dark-side{
-  background:var(--navy);
+  background:var(--navy-dark);
   padding:80px 56px;
   position:relative;overflow:hidden;
   display:flex;flex-direction:column;justify-content:center;
@@ -1520,17 +1509,20 @@ function showPage(name) {
 /* ── NAV ── */
 function updateNav() {
   const nav = document.getElementById('nav');
-  nav.classList.remove('scrolled','on-dark');
-  if (darkPages.includes(cur)) {
-    nav.classList.add('on-dark');
-  } else if (window.scrollY > 60) {
-    nav.classList.add('scrolled');
+  nav.classList.remove('scrolled','hero-nav','page-nav');
+  if (cur === 'home') {
+    if (window.scrollY > 60) nav.classList.add('scrolled');
+    else nav.classList.add('hero-nav');
+  } else {
+    nav.classList.add('page-nav');
   }
 }
 
 window.addEventListener('scroll', () => {
-  if (!darkPages.includes(cur)) {
-    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  if (cur === 'home') {
+    const nav = document.getElementById('nav');
+    if (window.scrollY > 60) { nav.classList.remove('hero-nav'); nav.classList.add('scrolled'); }
+    else { nav.classList.remove('scrolled'); nav.classList.add('hero-nav'); }
   }
   document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
 }, { passive: true });

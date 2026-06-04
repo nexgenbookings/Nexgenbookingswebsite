@@ -17,7 +17,7 @@
   --navy-dark:#0c1b40;
   --white:#ffffff;
   --off-white:#f5f7fa;
-  --border:#dde3ed;
+  --border:#b8c5d6;
   --text:#1a2540;
   --muted:#6b7a99;
   --radius:10px;
@@ -150,7 +150,7 @@ nav.scrolled,nav.page-nav{
   box-shadow:0 1px 0 var(--border);
 }
 .nav-logo img{height:40px;transition:height .35s;display:block}
-.nav-logo img.logo-color{mix-blend-mode:multiply}
+.nav-logo img.logo-color{}
 .nav-logo img.logo-white{display:none}
 nav.scrolled .nav-logo img,nav.page-nav .nav-logo img{height:32px}
 /* Hero only — show white logo */
@@ -206,6 +206,17 @@ nav.hero-nav .nav-logo img.logo-white{display:block;opacity:.9}
 }
 #btt.show{opacity:1;transform:none}
 #btt:hover{background:var(--navy-mid)}
+
+/* WhatsApp floating button */
+#wa-float{
+  position:fixed;bottom:80px;right:32px;z-index:90;
+  width:40px;height:40px;background:#25D366;color:#fff;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .15s;
+  box-shadow:var(--shadow);
+  text-decoration:none;
+}
+#wa-float:hover{background:#1eb358;transform:translateY(-2px)}
 
 /* ─────────────────────────────
    HOME — HERO
@@ -407,7 +418,7 @@ footer{
   border-bottom:1px solid rgba(255,255,255,.07);
   margin-bottom:28px;
 }
-.footer-brand img{height:36px;margin-bottom:18px;opacity:.7}
+.footer-brand img{height:52px;margin-bottom:18px;opacity:.85}
 .footer-brand p{font-size:.82rem;line-height:1.82;max-width:260px;font-weight:300}
 .footer-col h4{
   font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
@@ -789,6 +800,9 @@ footer{
 
 <div id="pt"></div>
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<a id="wa-float" href="https://wa.me/15167245435" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <!-- NAV -->
 <nav id="nav">
@@ -886,7 +900,7 @@ footer{
       <div class="section-header sr fade">
         <div class="eyebrow">Where We Go</div>
         <h2>Destinations we <em>know well.</em></h2>
-        <p>18 destinations. Every itinerary built from scratch.</p>
+        <p>21 destinations. Every itinerary built from scratch.</p>
       </div>
       <div class="dest-cards-grid">
         <div class="dest-card sr up d1" onclick="showPage('booking')">
@@ -931,7 +945,7 @@ footer{
         </div>
       </div>
       <div style="margin-top:40px">
-        <span class="section-link sr fade" onclick="showPage('destinations')">View all 18 destinations →</span>
+        <span class="section-link sr fade" onclick="showPage('destinations')">View all 21 destinations →</span>
       </div>
     </div>
   </section>
@@ -992,7 +1006,7 @@ footer{
         <h2>Real trips. <em>Real results.</em></h2>
       </div>
       <div class="testi-grid">
-        <div class="testi-card featured sr up d1">
+        <div class="testi-card sr up d1">
           <p class="testi-quote">"NexGen didn't just book our Paris trip — they knew which hotel was a five-minute walk from the shul, which restaurant we'd actually enjoy, and what to do on Friday afternoon when everything closes. It felt like getting advice from someone who's been there a hundred times, because they have."</p>
           <div class="testi-attr">
             <strong>Sarah R.</strong>
@@ -1084,7 +1098,7 @@ footer{
 
   <div class="stats-bar">
     <div class="stats-bar-inner">
-      <div class="stat-item sr fade"><div class="stat-num">18</div><div class="stat-label">Destinations</div></div>
+      <div class="stat-item sr fade"><div class="stat-num">21</div><div class="stat-label">Destinations</div></div>
       <div class="stat-item sr fade d1"><div class="stat-num">100%</div><div class="stat-label">Custom itineraries</div></div>
       <div class="stat-item sr fade d2"><div class="stat-num">24h</div><div class="stat-label">Response time</div></div>
       <div class="stat-item sr fade d3"><div class="stat-num">1</div><div class="stat-label">Point of contact</div></div>
@@ -1196,16 +1210,30 @@ footer{
         <button class="filter-btn" onclick="filterDest(this,'mideast')">Middle East</button>
         <button class="filter-btn" onclick="filterDest(this,'americas')">Americas</button>
         <button class="filter-btn" onclick="filterDest(this,'mediterranean')">Mediterranean</button>
+        <button class="filter-btn" onclick="filterDest(this,'asia')">Asia</button>
+        <button class="filter-btn" onclick="filterDest(this,'africa')">Africa</button>
       </div>
       <div class="dest-page-grid" id="destGrid">
         <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=700&q=80" alt="Paris"/></div><div class="dest-pg-body"><div class="region">Europe · France</div><h3>Paris</h3><p>The Marais. La Victoire. Shabbat within walking distance. September is the month.</p></div></div>
         <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=700&q=80" alt="Rome"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Rome</h3><p>The oldest ghetto in Europe. Remarkable history, remarkable food. Book early.</p></div></div>
         <div class="dest-pg-card sr up d2" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=700&q=80" alt="Venice"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Venice</h3><p>The Ghetto Novo, founded 1516. For special occasions. Unique in the world.</p></div></div>
         <div class="dest-pg-card sr up" data-region="mideast" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80" alt="Dubai"/></div><div class="dest-pg-body"><div class="region">Middle East · UAE</div><h3>Dubai</h3><p>Since normalisation, genuinely excellent kosher options. Friday afternoons need planning.</p></div></div>
-        <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Cyprus"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Cyprus</div><h3>Paphos</h3><p>A relaxed coastal escape. Easy from Israel. Good for a long weekend.</p></div></div>
+        <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=700&q=80" alt="Cyprus"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Cyprus</div><h3>Paphos</h3><p>A relaxed coastal escape. Easy from Israel. Good for a long weekend.</p></div></div>
         <div class="dest-pg-card sr up d2" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=700&q=80" alt="Panama"/></div><div class="dest-pg-body"><div class="region">Americas · Panama</div><h3>Panama City</h3><p>A surprisingly strong Jewish community and kosher infrastructure. Genuinely different.</p></div></div>
         <div class="dest-pg-card sr up" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=700&q=80" alt="Cancun"/></div><div class="dest-pg-body"><div class="region">Caribbean · Mexico</div><h3>Cancún</h3><p>Resorts that work with kosher caterers. White sand. Useful for families.</p></div></div>
         <div class="dest-pg-card sr up d1" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80" alt="Milan"/></div><div class="dest-pg-body"><div class="region">Europe · Italy</div><h3>Milan</h3><p>Fashion, design, and an underrated Jewish community. The Duomo and then dinner.</p></div></div>
+        <div class="dest-pg-card sr up d2" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=700&q=80" alt="London"/></div><div class="dest-pg-body"><div class="region">Europe · UK</div><h3>London</h3><p>Golders Green. Edgware. A kosher infrastructure that's hard to beat anywhere in Europe.</p></div></div>
+        <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=700&q=80" alt="Amsterdam"/></div><div class="dest-pg-body"><div class="region">Europe · Netherlands</div><h3>Amsterdam</h3><p>The Portuguese Synagogue. The Anne Frank House. Jewish Amsterdam is its own journey.</p></div></div>
+        <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=700&q=80" alt="Barcelona"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Spain</div><h3>Barcelona</h3><p>Architecture, beaches, and a growing kosher scene. Best in May or October.</p></div></div>
+        <div class="dest-pg-card sr up d2" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1541849546-216549ae216d?w=700&q=80" alt="Budapest"/></div><div class="dest-pg-body"><div class="region">Europe · Hungary</div><h3>Budapest</h3><p>The Dohány Street Synagogue — the largest in Europe. Grand architecture. Affordable.</p></div></div>
+        <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=700&q=80" alt="Prague"/></div><div class="dest-pg-body"><div class="region">Europe · Czech Republic</div><h3>Prague</h3><p>Josefov — one of the best-preserved Jewish quarters in the world. Stunning at any season.</p></div></div>
+        <div class="dest-pg-card sr up d1" data-region="mideast" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1539978411915-9f883018db6e?w=700&q=80" alt="Jerusalem"/></div><div class="dest-pg-body"><div class="region">Middle East · Israel</div><h3>Jerusalem</h3><p>The Western Wall, the Old City, and an unmatched spiritual weight. There is nowhere else like it.</p></div></div>
+        <div class="dest-pg-card sr up d2" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1546436836-07a91091f160?w=700&q=80" alt="New York"/></div><div class="dest-pg-body"><div class="region">Americas · USA</div><h3>New York</h3><p>The Five Towns. The Upper West Side. For destination clients flying in from abroad.</p></div></div>
+        <div class="dest-pg-card sr up" data-region="americas" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=700&q=80" alt="Miami"/></div><div class="dest-pg-body"><div class="region">Americas · USA</div><h3>Miami</h3><p>Bal Harbour. South Beach. Year-round sun with a strong kosher community built in.</p></div></div>
+        <div class="dest-pg-card sr up d1" data-region="mediterranean" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=700&q=80" alt="Marrakech"/></div><div class="dest-pg-body"><div class="region">Mediterranean · Morocco</div><h3>Marrakech</h3><p>The Mellah, the souks, and a surprisingly accessible kosher infrastructure. Genuinely different.</p></div></div>
+        <div class="dest-pg-card sr up" data-region="europe" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1478185043339-d6c27ccac616?w=700&q=80" alt="Lisbon"/></div><div class="dest-pg-body"><div class="region">Europe · Portugal</div><h3>Lisbon</h3><p>Alfama, the trams, the Atlantic light. A small but growing kosher scene — and one of Europe's most beautiful cities.</p></div></div>
+        <div class="dest-pg-card sr up d2" data-region="asia" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=700&q=80" alt="Thailand"/></div><div class="dest-pg-body"><div class="region">Asia · Thailand</div><h3>Thailand</h3><p>Chabad houses in Bangkok, Chiang Mai, and Koh Samui. Stunning country with real support for kosher travellers.</p></div></div>
+        <div class="dest-pg-card sr up" data-region="africa" onclick="showPage('booking')"><div class="dest-pg-img"><img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=700&q=80" alt="South Africa"/></div><div class="dest-pg-body"><div class="region">Africa · South Africa</div><h3>Cape Town</h3><p>Lion's Head, the Cape Peninsula, and a well-established Jewish community. One of the most beautiful cities in the world.</p></div></div>
       </div>
     </div>
   </section>
@@ -1355,12 +1383,12 @@ footer{
       <div class="sr up d1">
         <form id="contactForm" onsubmit="handleContact(event)">
           <div class="form-row">
-            <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required/></div>
-            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name"/></div>
+            <div class="form-group"><label>First Name</label><input type="text" name="first_name" placeholder="Your first name" required/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" name="last_name" placeholder="Your last name"/></div>
           </div>
-          <div class="form-group"><label>Email Address *</label><input type="email" placeholder="your@email.com" required/></div>
-          <div class="form-group"><label>Subject</label><input type="text" placeholder="What's this about?"/></div>
-          <div class="form-group"><label>Message *</label><textarea placeholder="Tell us how we can help..." required></textarea></div>
+          <div class="form-group"><label>Email Address *</label><input type="email" name="email" placeholder="your@email.com" required/></div>
+          <div class="form-group"><label>Subject</label><input type="text" name="subject" placeholder="What's this about?"/></div>
+          <div class="form-group"><label>Message *</label><textarea name="message" placeholder="Tell us how we can help..." required></textarea></div>
           <button type="submit" class="btn-primary" style="margin-top:8px">Send message →</button>
         </form>
         <div id="contactSuccess" style="display:none;padding:44px 0">
@@ -1400,7 +1428,7 @@ footer{
   <section style="padding:40px 0 0">
     <div class="container">
       <div style="max-width:860px;margin:0 auto">
-        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" scrolling="no" width="100%" height="600" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV" style="display:block;overflow:hidden"></iframe>
+        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" scrolling="no" width="100%" height="600" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV" style="display:block;overflow:hidden;min-height:700px"></iframe>
         <script type="text/javascript">
           iFrameResize({
             checkOrigin: false,
@@ -1579,10 +1607,37 @@ function submitBooking() {
 }
 
 /* ── CONTACT FORM ── */
+/* To activate: sign up at formspree.io, create a form, and replace REPLACE_WITH_YOUR_FORM_ID below */
+const FORMSPREE_ID = 'REPLACE_WITH_YOUR_FORM_ID';
+
 function handleContact(e) {
   e.preventDefault();
-  document.getElementById('contactForm').style.display = 'none';
-  document.getElementById('contactSuccess').style.display = 'block';
+  const form = document.getElementById('contactForm');
+  const btn = form.querySelector('button[type="submit"]');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const data = new FormData(form);
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method: 'POST',
+    body: data,
+    headers: { Accept: 'application/json' }
+  })
+  .then(r => {
+    if (r.ok) {
+      form.style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    } else {
+      btn.textContent = 'Send message →';
+      btn.disabled = false;
+      alert('Something went wrong. Please email us directly at info@nexgenbookings.com');
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Send message →';
+    btn.disabled = false;
+    alert('Something went wrong. Please email us directly at info@nexgenbookings.com');
+  });
 }
 
 /* ── INIT ── */

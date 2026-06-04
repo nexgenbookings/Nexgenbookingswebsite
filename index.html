@@ -154,10 +154,14 @@ nav.on-dark{
   padding:14px 48px;
   background:rgba(12,27,64,.96);
 }
-.nav-logo img{height:40px;transition:height .35s,filter .35s;display:block;mix-blend-mode:multiply}
+.nav-logo img{height:40px;transition:height .35s;display:block}
+.nav-logo img.logo-color{mix-blend-mode:multiply}
+.nav-logo img.logo-white{display:none}
 nav.scrolled .nav-logo img{height:32px}
-nav.on-dark .nav-logo img{filter:brightness(0) invert(1) opacity(.9);height:32px;mix-blend-mode:normal}
-nav:not(.scrolled):not(.on-dark) .nav-logo img{filter:brightness(0) invert(1) opacity(.9);mix-blend-mode:normal}
+nav.on-dark .nav-logo img.logo-color,
+nav:not(.scrolled):not(.on-dark) .nav-logo img.logo-color{display:none}
+nav.on-dark .nav-logo img.logo-white,
+nav:not(.scrolled):not(.on-dark) .nav-logo img.logo-white{display:block;height:32px;opacity:.9}
 
 .nav-links{display:flex;align-items:center;gap:36px}
 .nav-links a{
@@ -414,7 +418,7 @@ footer{
   border-bottom:1px solid rgba(255,255,255,.07);
   margin-bottom:28px;
 }
-.footer-brand img{height:36px;margin-bottom:18px;filter:brightness(0) invert(1) opacity(.65)}
+.footer-brand img{height:36px;margin-bottom:18px;opacity:.7}
 .footer-brand p{font-size:.82rem;line-height:1.82;max-width:260px;font-weight:300}
 .footer-col h4{
   font-size:.64rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
@@ -432,24 +436,145 @@ footer{
    INTERNAL PAGE HEADER
 ───────────────────────────────*/
 .pg-header{
-  padding:160px 48px 80px;
+  padding:160px 48px 88px;
   background:var(--navy);
   border-bottom:1px solid rgba(255,255,255,.06);
+  position:relative;overflow:hidden;
 }
+.pg-header-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.18;
+  transition:transform 8s ease;
+}
+.pg-header:hover .pg-header-bg{transform:scale(1.04)}
+.pg-header-content{position:relative;z-index:1}
 .pg-eyebrow{
   font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.32);margin-bottom:20px;
+  color:rgba(255,255,255,.4);margin-bottom:20px;
 }
 .pg-header h1{
   font-family:'EB Garamond',serif;
   font-size:clamp(3rem,7vw,5.5rem);
   font-weight:400;color:#fff;line-height:.96;letter-spacing:-.025em;
 }
-.pg-header h1 em{font-style:italic;color:rgba(255,255,255,.5)}
+.pg-header h1 em{font-style:italic;color:rgba(255,255,255,.55)}
 .pg-header p{
-  font-size:.95rem;line-height:1.82;color:rgba(255,255,255,.45);
-  font-weight:300;max-width:480px;margin-top:22px;
+  font-size:.97rem;line-height:1.82;color:rgba(255,255,255,.5);
+  font-weight:300;max-width:500px;margin-top:22px;
 }
+
+/* ─────────────────────────────
+   STATS BAR
+───────────────────────────────*/
+.stats-bar{
+  background:var(--navy);padding:0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.stats-bar-inner{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  max-width:1200px;margin:0 auto;
+}
+.stat-item{
+  padding:40px 48px;
+  border-right:1px solid rgba(255,255,255,.07);
+  text-align:center;
+}
+.stat-item:last-child{border-right:none}
+.stat-num{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(2.4rem,4vw,3.2rem);
+  font-weight:400;color:#fff;line-height:1;
+  letter-spacing:-.02em;margin-bottom:8px;
+}
+.stat-label{
+  font-size:.7rem;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);
+}
+
+/* ─────────────────────────────
+   HIW VISUAL STEPS
+───────────────────────────────*/
+.hiw-step-visual{
+  display:grid;grid-template-columns:72px 1fr;
+  gap:28px;padding:52px 0;
+  border-bottom:1px solid var(--border);align-items:start;
+}
+.hiw-step-visual:last-child{border-bottom:none}
+.step-circle{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'EB Garamond',serif;
+  font-size:1.3rem;font-weight:400;font-style:italic;
+  flex-shrink:0;margin-top:4px;
+}
+.hiw-content h3{
+  font-family:'EB Garamond',serif;
+  font-size:1.35rem;font-weight:500;
+  letter-spacing:-.01em;margin-bottom:10px;color:var(--text);
+  padding-top:6px;
+}
+.hiw-content p{font-size:.9rem;line-height:1.82;color:var(--muted);font-weight:300}
+
+/* ─────────────────────────────
+   CONTACT VISUAL SPLIT
+───────────────────────────────*/
+.contact-split{
+  display:grid;grid-template-columns:1fr 1fr;min-height:600px;
+}
+.contact-dark-side{
+  background:var(--navy);
+  padding:80px 56px;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.contact-dark-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=900&q=70') center/cover no-repeat;
+  opacity:.12;
+}
+.contact-dark-content{position:relative;z-index:1}
+.contact-dark-side h2{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(1.6rem,2.5vw,2.4rem);
+  font-weight:400;letter-spacing:-.01em;margin-bottom:16px;color:#fff;
+}
+.contact-dark-side h2 em{font-style:italic;color:rgba(255,255,255,.55)}
+.contact-dark-side>div>p{font-size:.92rem;line-height:1.82;color:rgba(255,255,255,.5);font-weight:300;margin-bottom:44px}
+.contact-dark-side .c-method strong{color:rgba(255,255,255,.4)}
+.contact-dark-side .c-method a,
+.contact-dark-side .c-method span{color:rgba(255,255,255,.85)}
+.contact-dark-side .c-method a:hover{color:#fff}
+.contact-light-side{
+  padding:80px 56px;background:var(--white);
+  display:flex;flex-direction:column;justify-content:center;
+}
+
+/* ─────────────────────────────
+   PHOTO ACCENT SECTIONS
+───────────────────────────────*/
+.photo-band{
+  height:340px;overflow:hidden;position:relative;
+}
+.photo-band img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 8s ease;
+}
+.photo-band:hover img{transform:scale(1.04)}
+.photo-band-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(12,27,64,.6) 0%,transparent 60%);
+  display:flex;align-items:center;padding:0 64px;
+}
+.photo-band-text{color:#fff;max-width:420px}
+.photo-band-text .eyebrow{color:rgba(255,255,255,.5)}
+.photo-band-text h2{
+  font-family:'EB Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  font-weight:400;line-height:1.15;letter-spacing:-.015em;margin-top:8px;
+}
+.photo-band-text h2 em{font-style:italic;color:rgba(255,255,255,.65)}
 
 /* ─────────────────────────────
    ABOUT PAGE
@@ -629,6 +754,17 @@ footer{
   .section{padding:72px 0}
   .hero-headline{font-size:clamp(44px,11vw,80px)}
   .hero-sub{font-size:.95rem}
+  .pg-header{padding:120px 28px 64px}
+  .stats-bar-inner{grid-template-columns:1fr 1fr}
+  .stat-item{padding:28px 24px;border-bottom:1px solid rgba(255,255,255,.07)}
+  .stat-item:nth-child(even){border-right:none}
+  .photo-band{height:260px}
+  .photo-band-overlay{padding:0 28px}
+  .hiw-step-visual{grid-template-columns:1fr;gap:16px;padding:40px 0}
+  .step-circle{width:44px;height:44px;font-size:1.1rem}
+  .contact-split{grid-template-columns:1fr}
+  .contact-dark-side{padding:56px 28px}
+  .contact-light-side{padding:56px 28px}
   .features-grid{grid-template-columns:1fr 1fr;gap:16px}
   .dest-cards-grid{grid-template-columns:1fr 1fr}
   .testi-grid{grid-template-columns:1fr}
@@ -668,7 +804,8 @@ footer{
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
-    <img src="nexgen-logo.png" alt="NexGen Bookings"/>
+    <img src="nexgen-logo.png" alt="NexGen Bookings" class="logo-color"/>
+    <img src="nexgen-logo-white.png" alt="NexGen Bookings" class="logo-white"/>
   </div>
   <div class="nav-links">
     <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
@@ -906,7 +1043,7 @@ footer{
     <div class="footer-inner">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="nexgen-logo-square.png" alt="NexGen Bookings"/>
+          <img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/>
           <p>Kosher travel concierge for the modern Jewish traveller. Every trip built from scratch, by people who've been there.</p>
         </div>
         <div class="footer-col">
@@ -948,9 +1085,21 @@ footer{
 ══════════════════════════ -->
 <div class="page" id="page-about">
   <div class="pg-header">
-    <div class="pg-eyebrow">Our Story</div>
-    <h1>Who we <em>are</em></h1>
-    <p>A boutique travel concierge built for the Jewish community — by people who are part of it.</p>
+    <div class="pg-header-bg" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80')"></div>
+    <div class="pg-header-content">
+      <div class="pg-eyebrow">Our Story</div>
+      <h1>Who we <em>are</em></h1>
+      <p>A boutique travel concierge built for the Jewish community — by people who are part of it.</p>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item sr fade"><div class="stat-num">18</div><div class="stat-label">Destinations</div></div>
+      <div class="stat-item sr fade d1"><div class="stat-num">100%</div><div class="stat-label">Custom itineraries</div></div>
+      <div class="stat-item sr fade d2"><div class="stat-num">24h</div><div class="stat-label">Response time</div></div>
+      <div class="stat-item sr fade d3"><div class="stat-num">1</div><div class="stat-label">Point of contact</div></div>
+    </div>
   </div>
 
   <section class="section">
@@ -1027,7 +1176,7 @@ footer{
   <footer>
     <div class="footer-inner">
       <div class="footer-grid">
-        <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
+        <div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveller.</p></div>
         <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
         <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
       </div>
@@ -1042,9 +1191,12 @@ footer{
 ══════════════════════════ -->
 <div class="page" id="page-destinations">
   <div class="pg-header">
-    <div class="pg-eyebrow">Where We Go</div>
-    <h1>The places we<br><em>know well.</em></h1>
-    <p>Every itinerary is custom. These are destinations we've planned enough times to know what makes them work — and what to avoid.</p>
+    <div class="pg-header-bg" style="background-image:url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1600&q=80')"></div>
+    <div class="pg-header-content">
+      <div class="pg-eyebrow">Where We Go</div>
+      <h1>The places we<br><em>know well.</em></h1>
+      <p>Every itinerary is custom. These are destinations we've planned enough times to know what makes them work — and what to avoid.</p>
+    </div>
   </div>
 
   <section class="section">
@@ -1096,32 +1248,73 @@ footer{
 ══════════════════════════ -->
 <div class="page" id="page-howitworks">
   <div class="pg-header">
-    <div class="pg-eyebrow">The Process</div>
-    <h1>How it <em>works</em></h1>
-    <p>Five steps. One person handling everything. No surprises between step one and boarding.</p>
+    <div class="pg-header-bg" style="background-image:url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=1600&q=80')"></div>
+    <div class="pg-header-content">
+      <div class="pg-eyebrow">The Process</div>
+      <h1>How it <em>works</em></h1>
+      <p>Five steps. One person handling everything. No surprises between step one and boarding.</p>
+    </div>
+  </div>
+
+  <!-- Photo band -->
+  <div class="photo-band">
+    <img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=1800&q=80" alt="Travel planning"/>
+    <div class="photo-band-overlay">
+      <div class="photo-band-text">
+        <div class="eyebrow">Our Promise</div>
+        <h2>Nothing booked until<br>you say <em>yes.</em></h2>
+      </div>
+    </div>
   </div>
 
   <section class="section">
     <div class="container">
-      <div class="hiw-body">
-        <div class="hiw-steps">
-          <div class="hiw-step sr up"><div class="hiw-num">01</div><div class="hiw-content"><h3>You share your travel details</h3><p>Destination, dates, group size, budget, kosher requirements, and anything specific — special occasions, accessibility needs, neighbourhoods you want to be near. We ask the questions a good travel adviser asks.</p></div></div>
-          <div class="hiw-step sr up d1"><div class="hiw-num">02</div><div class="hiw-content"><h3>We build your itinerary</h3><p>A real person researches and curates your trip — flights, hotels, kosher dining, transfers, and logistics. We build it around your preferences, not around what's easiest for us to book.</p></div></div>
-          <div class="hiw-step sr up d2"><div class="hiw-num">03</div><div class="hiw-content"><h3>You review everything</h3><p>We send a full proposal. You review it. We adjust until every detail is right. Nothing is booked until you say so — and every decision is explained.</p></div></div>
-          <div class="hiw-step sr up d3"><div class="hiw-num">04</div><div class="hiw-content"><h3>We handle all the bookings</h3><p>Once approved, we manage every reservation — flights, hotels, transfers, restaurants, and any special arrangements. You don't need to do anything except pack.</p></div></div>
-          <div class="hiw-step sr up d4"><div class="hiw-num">05</div><div class="hiw-content"><h3>Your digital itinerary arrives</h3><p>A clean digital brief with every confirmation, address, and detail — organised and accessible from your phone before and during the trip. Clients reference it constantly.</p></div></div>
+      <div style="max-width:780px;margin:0 auto">
+        <div class="section-header sr fade">
+          <div class="eyebrow">Step by Step</div>
+          <h2>From your first message<br>to your <em>boarding pass.</em></h2>
         </div>
 
-        <div class="hiw-why sr up">
-          <h3>Why NexGen Bookings?</h3>
-          <ul class="why-list">
-            <li><div class="why-check">✓</div>Every itinerary is built from scratch — no packages, no templates</li>
-            <li><div class="why-check">✓</div>Deep knowledge of kosher travel requirements in every destination we serve</li>
-            <li><div class="why-check">✓</div>Transparent pricing — you know what everything costs before anything is booked</li>
-            <li><div class="why-check">✓</div>One point of contact throughout — not a call centre, not a handoff</li>
-            <li><div class="why-check">✓</div>CLIA accredited — a professional agency with real accountability</li>
-            <li><div class="why-check">✓</div>Digital itinerary included with every booking</li>
-          </ul>
+        <div style="border-top:1px solid var(--border)">
+          <div class="hiw-step-visual sr up">
+            <div class="step-circle">1</div>
+            <div class="hiw-content"><h3>You share your travel details</h3><p>Destination, dates, group size, budget, kosher requirements, and anything specific — special occasions, accessibility needs, neighbourhoods you want to be near. We ask the questions a good travel adviser asks.</p></div>
+          </div>
+          <div class="hiw-step-visual sr up d1">
+            <div class="step-circle">2</div>
+            <div class="hiw-content"><h3>We build your itinerary</h3><p>A real person researches and curates your trip — flights, hotels, kosher dining, transfers, and logistics. We build it around your preferences, not around what's easiest for us to book.</p></div>
+          </div>
+          <div class="hiw-step-visual sr up d2">
+            <div class="step-circle">3</div>
+            <div class="hiw-content"><h3>You review everything</h3><p>We send a full proposal. You review it. We adjust until every detail is right. Nothing is booked until you say so — and every decision is explained.</p></div>
+          </div>
+          <div class="hiw-step-visual sr up d3">
+            <div class="step-circle">4</div>
+            <div class="hiw-content"><h3>We handle all the bookings</h3><p>Once approved, we manage every reservation — flights, hotels, transfers, restaurants, and any special arrangements. You don't need to do anything except pack.</p></div>
+          </div>
+          <div class="hiw-step-visual sr up d4">
+            <div class="step-circle">5</div>
+            <div class="hiw-content"><h3>Your digital itinerary arrives</h3><p>A clean digital brief with every confirmation, address, and detail — organised and accessible from your phone before and during the trip. Clients reference it constantly.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div style="max-width:780px;margin:0 auto">
+        <div class="section-header sr fade">
+          <div class="eyebrow">Why Choose Us</div>
+          <h2>Why NexGen Bookings?</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="feature-card sr up d1"><div class="feature-num">✓</div><h3>Built from scratch</h3><p>Every itinerary is custom — no packages, no templates, no copy-paste.</p></div>
+          <div class="feature-card sr up d2"><div class="feature-num">✓</div><h3>Deep kosher knowledge</h3><p>Certified restaurants, Shabbat logistics, holiday timing — we know it cold.</p></div>
+          <div class="feature-card sr up d3"><div class="feature-num">✓</div><h3>Transparent pricing</h3><p>You know what everything costs before anything is booked. No surprises.</p></div>
+          <div class="feature-card sr up d4"><div class="feature-num">✓</div><h3>One contact, always</h3><p>Not a call centre. Not a handoff. One person, direct line, throughout.</p></div>
+          <div class="feature-card sr up d5"><div class="feature-num">✓</div><h3>CLIA Accredited</h3><p>A professional agency with real accountability and industry credentials.</p></div>
+          <div class="feature-card sr up d5"><div class="feature-num">✓</div><h3>Digital itinerary included</h3><p>Every confirmation organised and on your phone before you land.</p></div>
         </div>
       </div>
     </div>
@@ -1145,46 +1338,49 @@ footer{
 ══════════════════════════ -->
 <div class="page" id="page-contact">
   <div class="pg-header">
-    <div class="pg-eyebrow">Get in Touch</div>
-    <h1>Let's <em>talk.</em></h1>
-    <p>A question about a destination, a trip you've been putting off, or something specific you need to know. We'll get back to you within 24 hours.</p>
+    <div class="pg-header-bg" style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1600&q=80')"></div>
+    <div class="pg-header-content">
+      <div class="pg-eyebrow">Get in Touch</div>
+      <h1>Let's <em>talk.</em></h1>
+      <p>A question about a destination, a trip you've been putting off, or something specific you need to know. We'll get back to you within 24 hours.</p>
+    </div>
   </div>
 
-  <section class="section">
-    <div class="container">
-      <div class="contact-body">
-        <div class="contact-info">
-          <h2 class="sr up">A question, a trip idea,<br>or just <em>a starting point.</em></h2>
+  <div class="contact-split">
+    <div class="contact-dark-side">
+      <div class="contact-dark-bg"></div>
+      <div class="contact-dark-content">
+        <h2 class="sr up">A question, a trip idea,<br>or just <em>a starting point.</em></h2>
+        <div>
           <p class="sr up d1">Whether you have a specific trip in mind or just want to understand whether we're right for you, reach out. No obligation. Honest conversation.</p>
           <div class="contact-methods">
             <div class="c-method sr up d2"><strong>Email</strong><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></div>
             <div class="c-method sr up d3"><strong>Phone</strong><a href="tel:+15167245435">+1 (516) 724-5435</a></div>
-            <div class="c-method sr up d4"><strong>WhatsApp</strong><a href="https://wa.me/15167245435" target="_blank" rel="noopener">Chat with us on WhatsApp →</a></div>
+            <div class="c-method sr up d4"><strong>WhatsApp</strong><a href="https://wa.me/15167245435" target="_blank" rel="noopener">Chat with us →</a></div>
             <div class="c-method sr up d5"><strong>Response time</strong><span>Within 24 hours</span></div>
-            <div class="c-method sr up d5"><strong>Accreditation</strong><span>CLIA Accredited Travel Agency</span></div>
-          </div>
-        </div>
-        <div class="sr up d1">
-          <form id="contactForm" onsubmit="handleContact(event)">
-            <div class="form-row">
-              <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required/></div>
-              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name"/></div>
-            </div>
-            <div class="form-group"><label>Email Address *</label><input type="email" placeholder="your@email.com" required/></div>
-            <div class="form-group"><label>Subject</label><input type="text" placeholder="What's this about?"/></div>
-            <div class="form-group"><label>Message *</label><textarea placeholder="Tell us how we can help..." required></textarea></div>
-            <button type="submit" class="btn-primary" style="margin-top:8px">
-              Send message →
-            </button>
-          </form>
-          <div id="contactSuccess" style="display:none;padding:44px 0">
-            <p style="font-family:'EB Garamond',serif;font-size:1.4rem;font-style:italic;color:var(--text);margin-bottom:10px">Message received.</p>
-            <p style="font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.75">We'll be in touch within 24 hours.</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <div class="contact-light-side">
+      <div class="sr up d1">
+        <form id="contactForm" onsubmit="handleContact(event)">
+          <div class="form-row">
+            <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name"/></div>
+          </div>
+          <div class="form-group"><label>Email Address *</label><input type="email" placeholder="your@email.com" required/></div>
+          <div class="form-group"><label>Subject</label><input type="text" placeholder="What's this about?"/></div>
+          <div class="form-group"><label>Message *</label><textarea placeholder="Tell us how we can help..." required></textarea></div>
+          <button type="submit" class="btn-primary" style="margin-top:8px">Send message →</button>
+        </form>
+        <div id="contactSuccess" style="display:none;padding:44px 0">
+          <p style="font-family:'EB Garamond',serif;font-size:1.4rem;font-style:italic;color:var(--text);margin-bottom:10px">Message received.</p>
+          <p style="font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.75">We'll be in touch within 24 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div class="footer-inner">
@@ -1204,9 +1400,12 @@ footer{
 ══════════════════════════ -->
 <div class="page" id="page-booking">
   <div class="pg-header">
-    <div class="pg-eyebrow">Plan Your Trip</div>
-    <h1>Let's get<br><em>started.</em></h1>
-    <p>Fill this out and we'll put together a personalised proposal within 24 hours.</p>
+    <div class="pg-header-bg" style="background-image:url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=80')"></div>
+    <div class="pg-header-content">
+      <div class="pg-eyebrow">Plan Your Trip</div>
+      <h1>Let's get<br><em>started.</em></h1>
+      <p>Fill this out and we'll put together a personalised proposal within 24 hours.</p>
+    </div>
   </div>
 
   <section style="padding:40px 0 0">
@@ -1259,7 +1458,7 @@ footer{
   </section>
   <footer>
     <div class="footer-inner">
-      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
       <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span></div>
     </div>
   </footer>
@@ -1285,7 +1484,7 @@ footer{
   </section>
   <footer>
     <div class="footer-inner">
-      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+      <div class="footer-grid"><div class="footer-brand"><img src="nexgen-logo-square-white.png" alt="NexGen Bookings"/><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
       <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span></div>
     </div>
   </footer>

@@ -3,871 +3,1071 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NexGen Bookings | Kosher Travel Concierge</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<title>NexGen Bookings — Kosher Travel Concierge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
+/* ─────────────────────────────────────────────
+   RESET
+───────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Brand colours — pulled straight from the logo */
+  --ink:#0a0d1a;
   --navy:#050e2d;
-  --navy-mid:#0a1f5e;
-  --navy-light:#122580;
+  --parchment:#f8f5ef;
+  --warm-white:#fdfcf9;
   --cyan:#00b4d8;
-  --cyan-light:#38d4f0;
-  --cyan-pale:#ddf4fb;
-  /* Keep legacy aliases so nothing breaks */
-  --gold:#00b4d8;
-  --gold-light:#38d4f0;
-  --gold-pale:#ddf4fb;
-  --cream:#f0f8ff;
-  --warm-white:#fafcff;
-  --surface:#e8f4fd;
-  /* Typography */
-  --text:#0a1f5e;
-  --muted:#5a7090;
-  --border:rgba(0,180,216,0.2);
-  --shadow:0 20px 60px rgba(5,14,45,0.14);
-  /* Spacing */
-  --side:56px;
+  --muted:#6b7485;
+  --rule:rgba(10,13,26,0.1);
+  --rule-strong:rgba(10,13,26,0.22);
 }
 html{scroll-behavior:smooth}
 body{
   font-family:'Space Grotesk',sans-serif;
-  color:var(--text);
-  background:#fff;
+  color:var(--ink);
+  background:var(--warm-white);
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 a{text-decoration:none;color:inherit}
 img{max-width:100%;display:block}
+button{font-family:inherit}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--navy)}
-::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:2px}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--parchment)}
+::-webkit-scrollbar-thumb{background:var(--ink)}
 
-/* ── PAGE TRANSITION OVERLAY ── */
-#page-transition{
-  position:fixed;inset:0;z-index:9999;pointer-events:none;
-  background:var(--navy-mid);
-  clip-path:inset(0 100% 0 0);
-  transition:clip-path 0.45s cubic-bezier(0.76,0,0.24,1);
-}
-#page-transition.in{clip-path:inset(0 0% 0 0);pointer-events:all}
-#page-transition.out{clip-path:inset(0 0 0 100%);pointer-events:none}
-
-/* ── PAGE SYSTEM ── */
+/* ─────────────────────────────────────────────
+   PAGE SYSTEM + TRANSITION
+───────────────────────────────────────────── */
 .page{display:none}
 .page.active{display:block}
 
-/* ══════════════════════════════
+#pt{/* page transition */
+  position:fixed;inset:0;z-index:9999;
+  background:var(--ink);pointer-events:none;
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 0.5s cubic-bezier(0.76,0,0.24,1);
+}
+#pt.in {clip-path:inset(0 0% 0 0);pointer-events:all}
+#pt.out{clip-path:inset(0 0 0 100%)}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────────────── */
+.sr{opacity:0;transform:translateY(28px);transition:opacity 0.9s cubic-bezier(0.22,1,0.36,1),transform 0.9s cubic-bezier(0.22,1,0.36,1)}
+.sr.up{transform:translateY(28px)}
+.sr.left{transform:translateX(-28px)}
+.sr.right{transform:translateX(28px)}
+.sr.fade{transform:none}
+.sr.visible{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+.d4{transition-delay:.32s}.d5{transition-delay:.4s}
+
+/* ─────────────────────────────────────────────
    NAV
-══════════════════════════════ */
+───────────────────────────────────────────── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
+  position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:24px 56px;
-  transition:padding 0.4s cubic-bezier(0.4,0,0.2,1),
-             background 0.4s ease,
-             box-shadow 0.4s ease;
+  padding:28px 56px;
+  transition:padding .4s ease, border-color .4s ease, background .4s ease;
+  border-bottom:1px solid transparent;
 }
 nav.scrolled{
+  padding:16px 56px;
+  background:rgba(253,252,249,0.97);
+  backdrop-filter:blur(12px);
+  border-color:var(--rule);
+}
+nav.dark-page{
+  padding:16px 56px;
   background:rgba(5,14,45,0.97);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  padding:14px 56px;
-  box-shadow:0 1px 0 rgba(0,180,216,0.15), 0 8px 32px rgba(5,14,45,0.4);
+  backdrop-filter:blur(12px);
+  border-color:rgba(255,255,255,0.08);
 }
-nav.light{
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  padding:14px 56px;
-  box-shadow:0 1px 0 rgba(0,0,0,0.07);
-}
-.nav-logo img{height:50px;width:auto;transition:height 0.4s cubic-bezier(0.4,0,0.2,1)}
-nav.scrolled .nav-logo img,nav.light .nav-logo img{height:38px}
-.nav-links{display:flex;align-items:center;gap:36px}
+.nav-logo img{height:44px;width:auto;transition:height .4s ease}
+nav.scrolled .nav-logo img{height:34px}
+nav.dark-page .nav-logo img{height:34px}
+.nav-links{display:flex;align-items:center;gap:40px}
 .nav-links a{
-  font-size:0.82rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
-  color:rgba(255,255,255,0.82);transition:color 0.25s;cursor:pointer;
-  position:relative;padding-bottom:3px;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink);opacity:0.6;cursor:pointer;
+  transition:opacity .2s;position:relative;
 }
-nav.light .nav-links a{color:var(--navy-mid)}
-.nav-links a::after{
-  content:'';position:absolute;bottom:0;left:0;
-  width:0;height:1.5px;background:var(--cyan);
-  transition:width 0.3s cubic-bezier(0.4,0,0.2,1);
+nav.dark-page .nav-links a{color:#fff}
+.nav-links a:hover,.nav-links a.active{opacity:1}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-3px;left:0;right:0;
+  height:1px;background:var(--cyan);
 }
-.nav-links a:hover::after,.nav-links a.active::after{width:100%}
-.nav-links a:hover,.nav-links a.active{color:var(--cyan-light)}
-nav.light .nav-links a:hover,nav.light .nav-links a.active{color:var(--cyan)}
-.btn-nav{
-  background:var(--cyan);color:var(--navy-mid)!important;
-  padding:10px 26px;font-size:0.8rem;font-weight:700;
-  letter-spacing:0.07em;text-transform:uppercase;
-  cursor:pointer;border:none;border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-  position:relative;overflow:hidden;
+.nav-cta{
+  font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink);cursor:pointer;border:none;background:none;
+  padding:9px 22px;border:1px solid var(--ink);
+  transition:background .25s, color .25s;
+  opacity:1!important;
 }
-.btn-nav::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.25) 50%,transparent 60%);
-  transform:translateX(-100%);transition:transform 0.5s ease;
-}
-.btn-nav:hover::before{transform:translateX(100%)}
-.btn-nav::after{display:none!important}
-.btn-nav:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,180,216,0.4)}
+nav.dark-page .nav-cta{color:#fff;border-color:rgba(255,255,255,0.4)}
+.nav-cta:hover{background:var(--ink);color:#fff}
+nav.dark-page .nav-cta:hover{background:#fff;color:var(--ink)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
-.hamburger span{width:24px;height:2px;background:white;transition:all 0.32s cubic-bezier(0.4,0,0.2,1);border-radius:2px}
-nav.light .hamburger span{background:var(--navy-mid)}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.hamburger span{width:22px;height:1.5px;background:var(--ink);transition:all .3s;border-radius:1px}
+nav.dark-page .hamburger span{background:#fff}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 .mobile-menu{
-  display:none;position:fixed;inset:0;z-index:999;
-  background:var(--navy);flex-direction:column;
-  align-items:center;justify-content:center;gap:36px;
+  display:none;position:fixed;inset:0;z-index:99;
+  background:var(--ink);flex-direction:column;
+  align-items:center;justify-content:center;gap:40px;
+  opacity:0;transition:opacity .3s;
 }
-.mobile-menu{transition:opacity 0.3s,transform 0.35s cubic-bezier(0.4,0,0.2,1);opacity:0;transform:translateY(-12px)}
-.mobile-menu.open{display:flex;opacity:1;transform:translateY(0)}
+.mobile-menu.open{display:flex;opacity:1}
 .mobile-menu a{
-  font-size:1.4rem;font-weight:600;color:rgba(255,255,255,0.85);cursor:pointer;letter-spacing:0.04em;
-  transition:color 0.2s,transform 0.2s;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.4rem;font-weight:400;font-style:italic;
+  color:rgba(255,255,255,0.8);cursor:pointer;
+  transition:color .2s;
 }
-.mobile-menu a:hover{color:var(--cyan-light);transform:translateX(6px)}
-.mobile-close{position:absolute;top:28px;right:32px;font-size:1.8rem;color:white;cursor:pointer;background:none;border:none}
+.mobile-menu a:hover{color:#fff}
+.mobile-close{position:absolute;top:28px;right:36px;font-size:1.6rem;color:rgba(255,255,255,0.5);cursor:pointer;background:none;border:none}
 
-/* ══════════════════════════════
-   HERO
-══════════════════════════════ */
-
-/* Stagger keyframe */
-@keyframes heroReveal{
-  from{opacity:0;transform:translateY(32px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
-
-.hero{
-  position:relative;height:100vh;min-height:660px;
+/* ─────────────────────────────────────────────
+   BACK TO TOP
+───────────────────────────────────────────── */
+#btt{
+  position:fixed;bottom:32px;right:32px;z-index:90;
+  width:40px;height:40px;border:1px solid var(--rule-strong);
+  background:var(--warm-white);color:var(--ink);
+  font-size:0.85rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  overflow:hidden;background:var(--navy);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .3s, transform .3s, background .2s;
 }
-/* Parallax wrapper — JS moves this */
-.hero-slides{position:absolute;inset:-8%;will-change:transform}
-.hero-slide{
-  position:absolute;inset:0;
-  background-size:cover;background-position:center;
-  opacity:0;transition:opacity 1.8s ease;
-}
-.hero-slide.active{opacity:1}
-.hero-slide::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(
-    160deg,
-    rgba(5,14,45,0.82) 0%,
-    rgba(5,14,45,0.5) 50%,
-    rgba(5,14,45,0.75) 100%
-  );
-}
-.hero-content{
-  position:relative;z-index:2;text-align:center;
-  color:#fff;padding:0 28px;max-width:920px;
-}
+#btt.show{opacity:1;transform:none}
+#btt:hover{background:var(--ink);color:#fff}
 
-/* Each child animates in sequence */
-.hero-badge{
-  display:inline-flex;align-items:center;gap:10px;
-  background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.4);
-  color:var(--cyan-light);padding:8px 20px;
-  font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
-  border-radius:100px;margin-bottom:28px;
-  backdrop-filter:blur(10px);
-  opacity:0;
-  animation:heroReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;
-}
-.hero-badge span{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s infinite}
+/* ─────────────────────────────────────────────
+   ══ HOME PAGE ══
+───────────────────────────────────────────── */
 
-.hero-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(3rem,7vw,6.5rem);
-  font-weight:800;line-height:1.04;
-  margin-bottom:24px;letter-spacing:-0.02em;
-  opacity:0;
-  animation:heroReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
+/* HERO — editorial, asymmetric */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:var(--parchment);
+  padding-top:100px;
+  overflow:hidden;
 }
-.hero-title em{font-style:italic;color:var(--cyan-light)}
-
-.hero-sub{
-  font-size:clamp(1rem,2vw,1.18rem);font-weight:300;
-  line-height:1.75;color:rgba(255,255,255,0.78);
-  max-width:560px;margin:0 auto 40px;
-  opacity:0;
-  animation:heroReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.65s forwards;
+.hero-left{
+  padding:64px 56px 80px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  border-right:1px solid var(--rule);
+  position:relative;
 }
-.hero-actions{
-  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
-  opacity:0;
-  animation:heroReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.88s forwards;
+.hero-eyebrow{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:14px;
 }
-.btn-hero-primary{
-  background:var(--cyan);color:var(--navy-mid);
-  padding:16px 40px;font-size:0.88rem;font-weight:700;
-  letter-spacing:0.07em;text-transform:uppercase;
-  cursor:pointer;border:none;border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--muted)}
+.hero-headline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(64px,8.5vw,110px);
+  font-weight:400;line-height:0.95;
+  letter-spacing:-0.02em;
+  color:var(--ink);
+  margin-top:auto;
+  padding-top:40px;
+}
+.hero-headline em{font-style:italic;color:var(--navy)}
+.hero-bottom{
+  margin-top:56px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:32px;
+}
+.hero-desc{
+  font-size:0.95rem;line-height:1.75;
+  color:var(--muted);max-width:340px;
+  font-weight:300;
+}
+.hero-cta-wrap{flex-shrink:0}
+.btn-ink{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink);border:1px solid var(--ink);
+  padding:14px 28px;cursor:pointer;background:none;
+  transition:background .25s, color .25s;
   position:relative;overflow:hidden;
 }
-.btn-hero-primary::after{
+.btn-ink::after{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.25) 50%,transparent 60%);
-  transform:translateX(-100%);transition:transform 0.55s ease;
+  background:var(--ink);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s cubic-bezier(0.4,0,0.2,1);z-index:0;
 }
-.btn-hero-primary:hover::after{transform:translateX(100%)}
-.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,180,216,0.5)}
-.btn-hero-ghost{
-  background:transparent;color:#fff;
-  padding:16px 40px;font-size:0.88rem;font-weight:600;
-  letter-spacing:0.07em;text-transform:uppercase;
+.btn-ink span{position:relative;z-index:1;transition:color .3s}
+.btn-ink:hover::after{transform:scaleX(1)}
+.btn-ink:hover span{color:#fff}
+.btn-ink .arrow{transition:transform .3s ease}
+.btn-ink:hover .arrow{transform:translateX(5px)}
+
+.hero-right{
+  position:relative;overflow:hidden;
+  background:var(--navy);
+}
+.hero-img{
+  width:100%;height:100%;object-fit:cover;
+  opacity:0.85;
+  transition:transform 8s ease;
+}
+.hero:hover .hero-img{transform:scale(1.03)}
+.hero-img-caption{
+  position:absolute;bottom:32px;left:28px;
+  font-size:0.68rem;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(255,255,255,0.45);
+}
+.hero-issue{
+  position:absolute;top:32px;right:28px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.78rem;font-weight:500;letter-spacing:0.08em;
+  color:rgba(255,255,255,0.35);writing-mode:vertical-rl;
+}
+
+/* Scroll indicator */
+.hero-scroll-hint{
+  position:absolute;bottom:36px;left:56px;
+  display:flex;align-items:center;gap:12px;
+  font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);
+}
+.scroll-track{width:32px;height:1px;background:var(--rule-strong);position:relative;overflow:hidden}
+.scroll-track::after{
+  content:'';position:absolute;top:0;left:0;
+  width:100%;height:100%;background:var(--ink);
+  animation:trackScan 2s ease-in-out infinite;
+}
+@keyframes trackScan{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
+
+/* ─────────────────────────────────────────────
+   SECTION 01 — WHO WE ARE
+───────────────────────────────────────────── */
+.section-01{
+  display:grid;
+  grid-template-columns:200px 1fr 1fr;
+  border-bottom:1px solid var(--rule);
+}
+.section-num{
+  padding:80px 40px;
+  border-right:1px solid var(--rule);
+  display:flex;align-items:flex-start;
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem;font-weight:300;
+  color:var(--rule-strong);line-height:1;
+}
+.section-01-left{
+  padding:80px 56px;
+  border-right:1px solid var(--rule);
+}
+.section-01-left h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,3.5vw,3rem);font-weight:400;
+  line-height:1.2;letter-spacing:-0.01em;
+  color:var(--ink);margin-bottom:28px;
+}
+.section-01-left h2 em{font-style:italic}
+.section-01-left p{
+  font-size:0.95rem;line-height:1.85;
+  color:var(--muted);margin-bottom:16px;
+  font-weight:300;max-width:400px;
+}
+.section-01-right{
+  padding:80px 56px;
+  background:var(--parchment);
+}
+.service-list{list-style:none;display:flex;flex-direction:column}
+.service-list li{
+  display:flex;align-items:baseline;gap:20px;
+  padding:22px 0;border-bottom:1px solid var(--rule);
+  font-size:0.88rem;font-weight:500;letter-spacing:0.02em;
+  color:var(--ink);
+  transition:color .2s;cursor:default;
+}
+.service-list li:last-child{border-bottom:none}
+.service-list li:hover{color:var(--cyan)}
+.service-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:0.8rem;font-weight:400;
+  color:var(--muted);flex-shrink:0;width:20px;
+}
+.service-note{
+  margin-left:auto;font-size:0.72rem;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ─────────────────────────────────────────────
+   SECTION 02 — DESTINATIONS  (editorial grid)
+───────────────────────────────────────────── */
+.section-02{
+  border-bottom:1px solid var(--rule);
+}
+.section-02-header{
+  display:grid;
+  grid-template-columns:200px 1fr auto;
+  align-items:end;
+  padding:80px 56px 48px;
+  border-bottom:1px solid var(--rule);
+  gap:24px;
+}
+.section-02-header .section-num{padding:0;border:none;align-items:center}
+.section-02-header h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;
+  letter-spacing:-0.01em;line-height:1.1;
+}
+.section-02-header p{
+  font-size:0.82rem;line-height:1.7;
+  color:var(--muted);max-width:260px;text-align:right;
+  font-weight:300;
+}
+
+/* Featured destination — full bleed row */
+.dest-featured{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--rule);
+  min-height:480px;
+}
+.dest-featured-img{
+  overflow:hidden;position:relative;
+  background:var(--navy);
+}
+.dest-featured-img img{
+  width:100%;height:100%;object-fit:cover;
+  opacity:0.9;
+  transition:transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.dest-featured:hover .dest-featured-img img{transform:scale(1.04)}
+.dest-featured-info{
+  padding:64px 56px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  border-left:1px solid var(--rule);
+}
+.dest-region-tag{
+  font-size:0.68rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:10px;
+}
+.dest-region-tag::before{content:'';width:16px;height:1px;background:var(--muted)}
+.dest-featured-info h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.4rem,4vw,4rem);font-weight:400;
+  letter-spacing:-0.02em;line-height:1.05;
+  margin-top:24px;
+}
+.dest-featured-info p{
+  font-size:0.9rem;line-height:1.8;
+  color:var(--muted);margin-top:20px;max-width:380px;
+  font-weight:300;
+}
+.dest-link{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:0.72rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--ink);
+  margin-top:36px;cursor:pointer;
+  transition:gap .25s;
+}
+.dest-link:hover{gap:16px}
+
+/* Destination text list */
+.dest-list{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.dest-list-item{
+  padding:36px 40px;
+  border-right:1px solid var(--rule);
   cursor:pointer;
-  border:1.5px solid rgba(255,255,255,0.4);border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+  transition:background .25s;
+  position:relative;
+  overflow:hidden;
 }
-.btn-hero-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.85);transform:translateY(-2px)}
-.hero-scroll{
-  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
-  z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;
-  color:rgba(255,255,255,0.55);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+.dest-list-item:last-child{border-right:none}
+.dest-list-item:hover{background:var(--parchment)}
+.dest-list-item::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:var(--cyan);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .3s cubic-bezier(0.4,0,0.2,1);
 }
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(255,255,255,0.5),transparent);animation:scrollAnim 2s infinite}
-@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-.slide-dots{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:8px}
-.slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.35s}
-.slide-dot.active{background:var(--cyan-light);width:28px;border-radius:3px}
-
-/* ══════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════ */
-.reveal,.reveal-left,.reveal-right,.reveal-scale{
-  transition-property:opacity,transform;
-  transition-duration:0.8s;
-  transition-timing-function:cubic-bezier(0.22,1,0.36,1);
+.dest-list-item:hover::after{transform:scaleX(1)}
+.dest-list-city{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:400;
+  line-height:1.1;margin-bottom:6px;
 }
-.reveal        { opacity:0; transform:translateY(36px) }
-.reveal-left   { opacity:0; transform:translateX(-36px) }
-.reveal-right  { opacity:0; transform:translateX(36px) }
-.reveal-scale  { opacity:0; transform:scale(0.93) }
-.reveal.visible,
-.reveal-left.visible,
-.reveal-right.visible,
-.reveal-scale.visible { opacity:1; transform:none }
-.delay-1{transition-delay:0.08s}
-.delay-2{transition-delay:0.16s}
-.delay-3{transition-delay:0.24s}
-.delay-4{transition-delay:0.32s}
-.delay-5{transition-delay:0.40s}
-
-/* ══════════════════════════════
-   TRUST BAR
-══════════════════════════════ */
-.trust-bar{
-  background:var(--navy);padding:20px 48px;
-  display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;
+.dest-list-country{
+  font-size:0.72rem;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--muted);
 }
-.trust-item{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7);font-size:0.82rem;font-weight:500;letter-spacing:0.03em}
-.trust-item svg{color:var(--gold);flex-shrink:0}
-.trust-divider{width:1px;height:22px;background:rgba(255,255,255,0.12)}
-
-/* ══════════════════════════════
-   SECTION COMMONS
-══════════════════════════════ */
-.section-label{
-  display:inline-flex;align-items:center;gap:12px;
-  font-size:0.7rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:18px;
+.dest-list-tags{
+  display:flex;flex-wrap:wrap;gap:5px;
+  margin-top:14px;
 }
-.section-label::before{content:'';width:32px;height:1.5px;background:var(--cyan)}
-.section-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,3.8vw,3.2rem);
-  font-weight:700;line-height:1.12;color:var(--navy-mid);
-  letter-spacing:-0.01em;
+.dest-list-tag{
+  font-size:0.65rem;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--muted);
+  padding:3px 8px;border:1px solid var(--rule-strong);
+  border-radius:2px;
 }
-.section-title em{font-style:italic;color:var(--cyan)}
-.section-body{
-  font-size:0.97rem;line-height:1.88;
-  color:var(--muted);max-width:560px;
-  font-weight:400;
+.dest-more{
+  padding:40px 56px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--rule);
+}
+.dest-more p{
+  font-size:0.82rem;color:var(--muted);font-weight:300;
 }
 
-/* reveal */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease}
-.reveal.visible{opacity:1;transform:none}
-.reveal-left{opacity:0;transform:translateX(-32px);transition:opacity 0.7s ease,transform 0.7s ease}
-.reveal-left.visible{opacity:1;transform:none}
-.reveal-right{opacity:0;transform:translateX(32px);transition:opacity 0.7s ease,transform 0.7s ease}
-.reveal-right.visible{opacity:1;transform:none}
-.delay-1{transition-delay:0.1s}.delay-2{transition-delay:0.2s}.delay-3{transition-delay:0.3s}.delay-4{transition-delay:0.4s}
-
-/* ══════════════════════════════
-   INTRO SECTION
-══════════════════════════════ */
-.intro{padding:100px 48px;max-width:1200px;margin:0 auto;display:flex;gap:80px;align-items:center}
-.intro-text{flex:1 1 50%}
-.intro-text p{font-size:0.97rem;line-height:1.82;color:var(--muted);margin-bottom:16px}
-.intro-pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
-.pillar{
-  background:var(--cream);border:1px solid var(--border);
-  padding:20px;border-radius:4px;
-  transition:all 0.3s;cursor:default;
+/* ─────────────────────────────────────────────
+   SECTION 03 — HOW IT WORKS  (the brief)
+───────────────────────────────────────────── */
+.section-03{
+  display:grid;grid-template-columns:200px 1fr 1fr;
+  border-bottom:1px solid var(--rule);
 }
-.pillar:hover{background:var(--navy);border-color:var(--navy);transform:translateY(-3px);box-shadow:var(--shadow)}
-.pillar:hover .pillar-title,.pillar:hover .pillar-body{color:#fff}
-.pillar:hover .pillar-icon{background:var(--gold);color:#fff}
-.pillar-icon{
-  width:38px;height:38px;border-radius:50%;
-  background:var(--gold-pale);color:var(--gold);
+.section-03-left{
+  padding:80px 56px;border-right:1px solid var(--rule);
+  grid-column:1/3;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.section-03-left h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;
+  letter-spacing:-0.01em;line-height:1.2;max-width:440px;
+}
+.section-03-left h2 em{font-style:italic}
+.section-03-right{
+  padding:80px 56px;
+  display:flex;flex-direction:column;gap:0;
+}
+.process-step{
+  display:grid;grid-template-columns:56px 1fr;gap:24px;
+  padding:28px 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.process-step:last-child{border-bottom:none}
+.process-step-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.4rem;font-weight:300;
+  color:var(--rule-strong);line-height:1;
+  transition:color .3s;
+}
+.process-step:hover .process-step-num{color:var(--ink)}
+.process-step-body h4{
+  font-size:0.85rem;font-weight:600;letter-spacing:0.02em;
+  margin-bottom:6px;
+}
+.process-step-body p{
+  font-size:0.85rem;line-height:1.72;color:var(--muted);
+  font-weight:300;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION 04 — PULLQUOTE TESTIMONIALS
+───────────────────────────────────────────── */
+.section-04{
+  border-bottom:1px solid var(--rule);
+  background:var(--ink);
+  padding:100px 0 80px;
+  overflow:hidden;
+}
+.section-04-header{
+  padding:0 56px 64px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  margin-bottom:0;
+}
+.section-04-header h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.4rem);font-weight:400;
+  color:#fff;letter-spacing:-0.01em;
+}
+.section-04-header .label{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(255,255,255,0.35);
+}
+/* The slider */
+.testi-viewport{overflow:hidden;padding:0 56px}
+.testi-rail{
+  display:flex;gap:2px;
+  transition:transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+  margin-top:0;
+}
+.testi-slide{
+  flex:0 0 calc(50% - 1px);
+  padding:56px 48px 52px;
+  border:1px solid rgba(255,255,255,0.07);
+  margin-top:1px;
+  transition:border-color .3s;
+  cursor:default;
+}
+.testi-slide:hover{border-color:rgba(0,180,216,0.25)}
+.testi-mark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:4rem;line-height:1;
+  color:var(--cyan);opacity:0.3;
+  margin-bottom:20px;
+}
+.testi-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.05rem,1.8vw,1.35rem);
+  font-weight:300;font-style:italic;
+  line-height:1.72;color:rgba(255,255,255,0.82);
+  margin-bottom:32px;
+}
+.testi-byline{
+  display:flex;align-items:center;gap:14px;
+}
+.testi-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--cyan);
   display:flex;align-items:center;justify-content:center;
-  font-size:1rem;margin-bottom:10px;transition:all 0.3s;
+  font-size:0.75rem;font-weight:700;color:var(--ink);flex-shrink:0;
 }
-.pillar-title{font-size:0.88rem;font-weight:700;margin-bottom:4px;color:var(--navy);transition:color 0.3s}
-.pillar-body{font-size:0.8rem;line-height:1.6;color:var(--muted);transition:color 0.3s}
-.intro-gallery{flex:1 1 44%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:200px 200px;gap:10px}
-.gallery-img{overflow:hidden;border-radius:4px}
-.gallery-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
-.gallery-img:hover img{transform:scale(1.06)}
-.gallery-img:first-child{grid-row:span 2;height:auto}
-.gallery-img:first-child img{height:100%}
-
-/* ══════════════════════════════
-   STATS
-══════════════════════════════ */
-.stats-section{background:var(--navy);padding:72px 48px;text-align:center}
-.stats-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
-.stat-item{}
-.stat-num{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.2rem,4vw,3.5rem);font-weight:700;
-  color:var(--gold-light);line-height:1;margin-bottom:8px;
+.testi-who strong{
+  display:block;font-size:0.82rem;font-weight:600;
+  color:rgba(255,255,255,0.85);letter-spacing:0.02em;
 }
-.stat-label{font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.06em;text-transform:uppercase}
+.testi-who span{
+  font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+}
+/* Controls */
+.testi-controls{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:32px 56px 0;
+}
+.testi-arrows{display:flex;gap:8px}
+.testi-arr{
+  width:40px;height:40px;border:1px solid rgba(255,255,255,0.15);
+  background:none;color:rgba(255,255,255,0.6);
+  font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;
+}
+.testi-arr:hover{border-color:var(--cyan);color:var(--cyan)}
+.testi-count{
+  font-size:0.72rem;letter-spacing:0.1em;
+  text-transform:uppercase;color:rgba(255,255,255,0.3);
+}
+.testi-progress-wrap{display:flex;gap:6px;flex:1;margin:0 32px}
+.testi-bar{
+  flex:1;height:1px;background:rgba(255,255,255,0.12);
+  cursor:pointer;position:relative;overflow:hidden;
+}
+.testi-bar-fill{
+  position:absolute;inset:0;background:var(--cyan);
+  transform:scaleX(0);transform-origin:left;
+}
+.testi-bar.active .testi-bar-fill{
+  transform:scaleX(1);
+  transition:transform 5s linear;
+}
 
-/* ══════════════════════════════
-   VISION SECTION
-══════════════════════════════ */
-.vision{position:relative;padding:110px 48px;overflow:hidden}
-.vision-bg{
-  position:absolute;inset:-20%;
-  background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600') center/cover no-repeat;
+/* ─────────────────────────────────────────────
+   SECTION 05 — PLACES  (vision/promise)
+───────────────────────────────────────────── */
+.section-05{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:560px;
+  border-bottom:1px solid var(--rule);
+}
+.section-05-img{
+  position:relative;overflow:hidden;background:var(--navy);
+}
+.section-05-img img{
+  width:100%;height:100%;object-fit:cover;
+  opacity:0.8;
   will-change:transform;
 }
-.vision-bg::after{content:'';position:absolute;inset:0;background:rgba(10,18,46,0.78)}
-.vision-inner{position:relative;z-index:1;max-width:680px;margin:0 auto;text-align:center;color:#fff}
-.vision-inner .section-label{justify-content:center;color:var(--gold-light)}
-.vision-inner .section-label::before{background:var(--gold-light)}
-.vision-inner h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,4vw,3.2rem);font-weight:700;
-  line-height:1.22;margin-bottom:24px;color:#fff;
+.section-05-body{
+  padding:80px 56px;
+  background:var(--parchment);
+  border-left:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:center;
 }
-.vision-inner h2 em{font-style:italic;color:var(--gold-light)}
-.vision-inner p{font-size:1rem;line-height:1.85;color:rgba(255,255,255,0.78);margin-bottom:36px}
-.btn-gold{
-  background:var(--cyan);color:var(--navy-mid);border:none;
-  padding:14px 36px;font-size:0.85rem;font-weight:700;
-  letter-spacing:0.07em;text-transform:uppercase;
-  cursor:pointer;border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-  display:inline-block;position:relative;overflow:hidden;
+.section-label-sm{
+  font-size:0.68rem;font-weight:600;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:24px;
 }
-.btn-gold::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.25) 50%,transparent 60%);
-  transform:translateX(-100%);transition:transform 0.5s ease;
+.section-label-sm::before{content:'';width:24px;height:1px;background:var(--muted)}
+.section-05-body h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,3.5vw,3rem);font-weight:400;
+  letter-spacing:-0.01em;line-height:1.15;
+  margin-bottom:24px;
 }
-.btn-gold:hover::after{transform:translateX(100%)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,180,216,0.45)}
+.section-05-body h2 em{font-style:italic}
+.section-05-body p{
+  font-size:0.95rem;line-height:1.85;
+  color:var(--muted);font-weight:300;
+  max-width:440px;margin-bottom:40px;
+}
+.stat-row{
+  display:flex;gap:40px;padding-top:40px;
+  border-top:1px solid var(--rule);
+  margin-top:auto;
+}
+.stat-item-sm{}
+.stat-num-sm{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.4rem;font-weight:400;line-height:1;
+  margin-bottom:4px;
+}
+.stat-label-sm{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--muted);
+}
 
-/* ══════════════════════════════
-   DESTINATIONS CAROUSEL
-══════════════════════════════ */
-.destinations-section{padding:100px 0;background:var(--cream);overflow:hidden}
-.dest-header{padding:0 48px;margin-bottom:56px;display:flex;align-items:flex-end;justify-content:space-between}
-.dest-header .section-body{margin-top:12px}
-.dest-nav{display:flex;gap:10px}
-.dest-arrow{
-  width:44px;height:44px;border-radius:50%;
-  border:1.5px solid var(--border);background:white;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.25s;color:var(--navy);
-  font-size:1rem;
-}
-.dest-arrow:hover{background:var(--gold);border-color:var(--gold);color:white}
-.dest-track-wrap{overflow:hidden;padding:8px 48px 8px 48px}
-.dest-track{display:flex;gap:20px;transition:transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94)}
-.dest-card{
-  flex:0 0 300px;border-radius:6px;overflow:hidden;
-  background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.07);
-  transition:all 0.35s;cursor:pointer;
-}
-.dest-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(13,27,62,0.15)}
-.dest-card-img{height:200px;overflow:hidden;position:relative}
-.dest-card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease}
-.dest-card:hover .dest-card-img img{transform:scale(1.08)}
-.dest-tag{
-  position:absolute;top:14px;left:14px;
-  background:rgba(13,27,62,0.8);color:var(--gold-light);
-  font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-  padding:5px 10px;border-radius:100px;backdrop-filter:blur(6px);
-}
-.dest-card-body{padding:22px}
-.dest-card-body h3{font-size:1.05rem;font-weight:700;margin-bottom:6px;color:var(--navy)}
-.dest-card-body p{font-size:0.84rem;line-height:1.65;color:var(--muted)}
-.dest-card-footer{
+/* ─────────────────────────────────────────────
+   HOME CTA STRIP
+───────────────────────────────────────────── */
+.home-cta-strip{
+  padding:80px 56px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 22px;border-top:1px solid rgba(0,0,0,0.05);
+  gap:48px;border-bottom:1px solid var(--rule);
 }
-.dest-card-footer span{font-size:0.78rem;color:var(--muted)}
-.dest-card-footer a{
-  font-size:0.8rem;font-weight:700;color:var(--cyan);cursor:pointer;
-  display:inline-flex;align-items:center;gap:4px;
-  transition:gap 0.25s ease;
+.home-cta-strip h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.8rem);font-weight:400;
+  letter-spacing:-0.01em;max-width:480px;
+  line-height:1.2;
 }
-.dest-card-footer a:hover{gap:10px}
+.home-cta-strip h2 em{font-style:italic}
+.cta-actions{display:flex;gap:14px;flex-shrink:0;flex-wrap:wrap}
 
-/* ══════════════════════════════
-   HOW IT WORKS
-══════════════════════════════ */
-.hiw{padding:100px 48px;max-width:1100px;margin:0 auto;display:flex;gap:80px;align-items:flex-start}
-.hiw-left{flex:1 1 40%;position:sticky;top:120px}
-.hiw-left p{font-size:0.97rem;line-height:1.82;color:var(--muted);margin-top:16px;margin-bottom:32px}
-.hiw-right{flex:1 1 55%}
-.hiw-step{
-  display:flex;gap:24px;padding:28px 0;
-  border-bottom:1px solid rgba(0,0,0,0.07);
-  transition:all 0.3s;
-}
-.hiw-step:last-child{border-bottom:none}
-.step-indicator{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0}
-.step-circle{
-  width:48px;height:48px;border-radius:50%;
-  border:2px solid var(--border);background:white;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--muted);
-  transition:all 0.35s;flex-shrink:0;
-}
-.hiw-step.active .step-circle,.hiw-step:hover .step-circle{
-  background:var(--gold);border-color:var(--gold);color:#fff;
-  box-shadow:0 4px 16px rgba(0,180,216,0.45);
-}
-.step-line{width:1.5px;flex:1;background:var(--border);margin:6px 0;min-height:20px}
-.hiw-step:last-child .step-line{display:none}
-.step-content{padding-top:10px}
-.step-content h3{font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--navy)}
-.step-content p{font-size:0.88rem;line-height:1.72;color:var(--muted)}
-
-/* ══════════════════════════════
-   TESTIMONIALS  — 3-up slider
-══════════════════════════════ */
-.testimonials{
-  background:var(--navy);padding:100px 0;
-  overflow:hidden;position:relative;
-}
-.testimonials::before{
-  content:'';position:absolute;bottom:-120px;left:-80px;
-  width:400px;height:400px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,180,216,0.07) 0%,transparent 70%);
-  pointer-events:none;
-}
-.testi-header{
-  padding:0 56px;margin-bottom:56px;
-  display:flex;align-items:flex-end;justify-content:space-between;
-  flex-wrap:wrap;gap:24px;
-}
-.testi-header .section-label{color:var(--cyan-light)}
-.testi-header .section-label::before{background:var(--cyan-light)}
-.testi-header .section-title{color:#fff}
-.testi-controls{display:flex;gap:10px}
-.testi-arrow{
-  width:44px;height:44px;border-radius:50%;
-  border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all 0.25s;color:#fff;font-size:1.1rem;
-}
-.testi-arrow:hover{background:var(--cyan);border-color:var(--cyan);color:var(--navy-mid)}
-.testi-track-wrap{overflow:hidden;padding:8px 56px 0}
-.testi-track{
-  display:flex;gap:22px;
-  transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-.testi-card{flex:0 0 calc(33.333% - 15px)}
-.testi-inner{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.09);
-  border-radius:10px;padding:36px;
-  backdrop-filter:blur(10px);
-  transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;
-  height:100%;
-}
-.testi-card:hover .testi-inner{
-  background:rgba(255,255,255,0.09);
-  border-color:rgba(0,180,216,0.3);
-  box-shadow:0 20px 50px rgba(0,0,0,0.2);
-}
-.testi-stars{color:var(--cyan-light);font-size:0.9rem;margin-bottom:16px;letter-spacing:3px}
-.testi-quote{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:0.98rem;line-height:1.78;
-  color:rgba(255,255,255,0.82);margin-bottom:28px;
-}
-.testi-author{display:flex;align-items:center;gap:14px}
-.testi-avatar{
-  width:42px;height:42px;border-radius:50%;
-  background:var(--cyan);display:flex;align-items:center;justify-content:center;
-  font-weight:700;color:var(--navy-mid);font-size:0.88rem;flex-shrink:0;
-}
-.testi-name{text-align:left}
-.testi-name strong{display:block;font-size:0.88rem;font-weight:600;color:#fff}
-.testi-name span{font-size:0.78rem;color:rgba(255,255,255,0.45)}
-
-/* Progress-bar dots */
-.testi-progress{
-  display:flex;gap:8px;padding:40px 56px 0;
-  max-width:none;
-}
-.testi-prog{
-  flex:1;height:2px;background:rgba(255,255,255,0.1);
-  border-radius:2px;cursor:pointer;overflow:hidden;
-}
-.testi-prog-fill{
-  height:100%;width:0;background:var(--cyan);border-radius:2px;
-}
-.testi-prog.active .testi-prog-fill{
-  width:100%;
-  transition:width 6s linear;
-}
-
-/* Legacy dot fallback */
-.testi-dots{display:none}
-
-/* ══════════════════════════════
-   HOME CTA
-══════════════════════════════ */
-.home-cta{
-  padding:110px 48px;background:var(--warm-white);
-  display:flex;align-items:center;justify-content:center;
-}
-.home-cta-inner{max-width:700px;text-align:center}
-.home-cta-inner .section-label{justify-content:center}
-.home-cta-inner .section-title{margin-bottom:18px}
-.home-cta-inner .section-body{margin:0 auto 36px;text-align:center}
-.cta-group{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.btn-primary{
-  background:var(--navy-mid);color:#fff;border:none;
-  padding:14px 36px;font-size:0.85rem;font-weight:700;
-  letter-spacing:0.07em;text-transform:uppercase;
-  cursor:pointer;border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-  display:inline-block;position:relative;overflow:hidden;
-}
-.btn-primary::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.15) 50%,transparent 60%);
-  transform:translateX(-100%);transition:transform 0.5s ease;
-}
-.btn-primary:hover::after{transform:translateX(100%)}
-.btn-primary:hover{
-  background:var(--cyan);color:var(--navy-mid);
-  transform:translateY(-2px);
-  box-shadow:0 8px 28px rgba(0,180,216,0.4);
-}
-.btn-outline{
-  background:transparent;color:var(--navy-mid);
-  border:1.5px solid var(--navy-mid);
-  padding:14px 36px;font-size:0.85rem;font-weight:700;
-  letter-spacing:0.07em;text-transform:uppercase;
-  cursor:pointer;border-radius:4px;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-  display:inline-block;
-}
-.btn-outline:hover{background:var(--navy-mid);color:#fff;transform:translateY(-2px)}
-
-/* ══════════════════════════════
+/* ─────────────────────────────────────────────
    FOOTER
-══════════════════════════════ */
-footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36px}
-.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:48px;margin-bottom:48px}
-.footer-brand img{height:42px;margin-bottom:18px;filter:brightness(0) invert(1) opacity(0.85)}
-.footer-brand p{font-size:0.85rem;line-height:1.78;max-width:280px}
-.footer-col h4{font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-light);margin-bottom:18px}
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
-.footer-col ul li a,.footer-col ul li{font-size:0.85rem;cursor:pointer;transition:color 0.2s}
+───────────────────────────────────────────── */
+footer{
+  padding:64px 56px 40px;
+  background:var(--ink);color:rgba(255,255,255,0.5);
+}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;
+  gap:56px;padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  margin-bottom:32px;
+}
+.footer-brand img{
+  height:34px;margin-bottom:20px;
+  filter:brightness(0) invert(1) opacity(.7);
+}
+.footer-brand p{font-size:0.82rem;line-height:1.8;max-width:260px;font-weight:300}
+.footer-col h4{
+  font-size:0.68rem;font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(255,255,255,0.35);
+  margin-bottom:20px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-col ul li a,.footer-col ul li{
+  font-size:0.82rem;cursor:pointer;transition:color .2s;font-weight:300;
+}
 .footer-col ul li a:hover,.footer-col ul li:hover{color:#fff}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.8rem}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;font-size:0.75rem;font-weight:400;
+}
 .footer-bottom-links{display:flex;gap:24px}
-.footer-bottom-links a{cursor:pointer;transition:color 0.2s}
-.footer-bottom-links a:hover{color:var(--gold-light)}
+.footer-bottom-links a{cursor:pointer;transition:color .2s}
+.footer-bottom-links a:hover{color:#fff}
+.footer-accreditation{
+  font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.25);
+}
 
-/* ══════════════════════════════
-   ABOUT PAGE
-══════════════════════════════ */
-.page-hero{
-  padding:160px 48px 90px;background:var(--navy);text-align:center;
-  position:relative;overflow:hidden;
+/* ─────────────────────────────────────────────
+   ══ INTERNAL PAGES ══
+───────────────────────────────────────────── */
+.page-header{
+  padding:160px 56px 80px;
+  background:var(--navy);
+  border-bottom:1px solid rgba(255,255,255,0.07);
 }
-.page-hero::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at center top,rgba(0,180,216,0.18) 0%,transparent 65%);
+.page-header-inner{max-width:840px}
+.page-eyebrow{
+  font-size:0.68rem;font-weight:600;letter-spacing:0.18em;
+  text-transform:uppercase;color:rgba(255,255,255,0.35);
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:24px;
 }
-.page-hero-content{position:relative;z-index:1}
-.page-hero .section-label{justify-content:center;color:var(--gold-light)}
-.page-hero .section-label::before{background:var(--gold-light)}
-.page-hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.4rem,5vw,4.5rem);font-weight:700;
-  color:#fff;line-height:1.12;margin-top:16px;
+.page-eyebrow::before{content:'';width:20px;height:1px;background:rgba(255,255,255,0.25)}
+.page-header h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,6vw,5.5rem);font-weight:400;
+  line-height:1.0;letter-spacing:-0.02em;
+  color:#fff;
 }
-.page-hero h1 em{font-style:italic;color:var(--gold-light)}
-.page-hero p{font-size:1rem;line-height:1.8;color:rgba(255,255,255,0.68);max-width:580px;margin:20px auto 0}
+.page-header h1 em{font-style:italic;color:var(--cyan)}
+.page-header p{
+  font-size:0.97rem;line-height:1.8;
+  color:rgba(255,255,255,0.5);max-width:520px;
+  margin-top:20px;font-weight:300;
+}
 
-.about-story{padding:90px 48px;max-width:1100px;margin:0 auto;display:flex;gap:72px;align-items:center}
-.about-story-text{flex:1 1 55%}
-.about-story-text .section-title{margin-bottom:20px}
-.about-story-text p{font-size:0.97rem;line-height:1.82;color:var(--muted);margin-bottom:16px}
-.about-story-imgs{flex:1 1 40%;display:flex;flex-direction:column;gap:12px}
-.about-story-imgs img{width:100%;height:260px;object-fit:cover;border-radius:4px;transition:transform 0.5s}
+/* About */
+.about-story{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--rule);
+}
+.about-story-text{
+  padding:80px 56px;border-right:1px solid var(--rule);
+}
+.about-story-text .section-label-sm{margin-bottom:28px}
+.about-story-text h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:400;
+  letter-spacing:-0.01em;margin-bottom:24px;line-height:1.2;
+}
+.about-story-text h2 em{font-style:italic}
+.about-story-text p{
+  font-size:0.92rem;line-height:1.85;color:var(--muted);
+  font-weight:300;margin-bottom:16px;max-width:480px;
+}
+.about-story-imgs{
+  overflow:hidden;display:flex;flex-direction:column;gap:2px;
+}
+.about-story-imgs img{
+  width:100%;flex:1;object-fit:cover;min-height:0;
+  transition:transform .5s ease;
+}
 .about-story-imgs img:hover{transform:scale(1.02)}
 
-.about-values{background:var(--cream);padding:80px 48px}
-.about-values-inner{max-width:1100px;margin:0 auto}
-.about-values h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;color:var(--navy);text-align:center;margin-bottom:52px}
-.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.value-card{background:#fff;border:1px solid var(--border);border-radius:4px;padding:32px;transition:all 0.3s}
-.value-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:var(--shadow)}
-.value-icon{font-size:1.6rem;margin-bottom:14px}
-.value-card h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:10px}
-.value-card p{font-size:0.87rem;line-height:1.72;color:var(--muted)}
+.values-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--rule);
+}
+.value-item{
+  padding:56px 48px;border-right:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  transition:background .25s;
+}
+.value-item:hover{background:var(--parchment)}
+.value-item:nth-child(3),.value-item:nth-child(6){border-right:none}
+.value-icon{font-size:1.4rem;margin-bottom:20px}
+.value-item h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.3rem;font-weight:500;
+  margin-bottom:12px;letter-spacing:-0.01em;
+}
+.value-item p{
+  font-size:0.85rem;line-height:1.78;color:var(--muted);font-weight:300;
+}
 
-/* ══════════════════════════════
-   DESTINATIONS PAGE
-══════════════════════════════ */
-.dest-page{padding:70px 48px;max-width:1100px;margin:0 auto}
-.dest-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px;justify-content:center}
+/* Destinations page */
+.dest-page-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--rule);
+}
+.dest-page-card{
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  overflow:hidden;cursor:pointer;
+  transition:background .25s;
+}
+.dest-page-card:nth-child(3n){border-right:none}
+.dest-page-card:hover{background:var(--parchment)}
+.dest-page-card-img{
+  height:220px;overflow:hidden;
+}
+.dest-page-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .65s cubic-bezier(0.4,0,0.2,1);
+}
+.dest-page-card:hover .dest-page-card-img img{transform:scale(1.06)}
+.dest-page-card-body{padding:28px 32px}
+.dest-page-card-body h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:400;margin-bottom:6px;
+  letter-spacing:-0.01em;
+}
+.dest-page-card-body .region{
+  font-size:0.68rem;font-weight:600;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:12px;
+}
+.dest-page-card-body p{
+  font-size:0.82rem;line-height:1.7;color:var(--muted);
+  font-weight:300;margin-bottom:16px;
+}
+.dest-page-tags{display:flex;gap:5px;flex-wrap:wrap}
+.dpt{
+  font-size:0.62rem;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--muted);
+  padding:3px 8px;border:1px solid var(--rule-strong);
+}
+.dest-filters-bar{
+  padding:24px 56px;border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
 .filter-btn{
-  padding:8px 20px;border:1.5px solid var(--border);
-  background:white;color:var(--muted);font-size:0.82rem;font-weight:500;
-  cursor:pointer;border-radius:100px;transition:all 0.2s;
+  font-size:0.72rem;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;padding:7px 16px;
+  border:1px solid var(--rule-strong);background:none;
+  color:var(--muted);cursor:pointer;transition:all .2s;
 }
-.filter-btn:hover,.filter-btn.active{background:var(--navy);border-color:var(--navy);color:#fff}
-.dest-full-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:60px}
-.dest-full-card{
-  border-radius:6px;overflow:hidden;background:#fff;
-  box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:all 0.35s;cursor:pointer;
-}
-.dest-full-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(13,27,62,0.14)}
-.dest-full-img{height:220px;overflow:hidden;position:relative}
-.dest-full-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s}
-.dest-full-card:hover .dest-full-img img{transform:scale(1.07)}
-.dest-region{
-  position:absolute;bottom:14px;left:14px;
-  background:rgba(13,27,62,0.85);color:var(--gold-light);
-  font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-  padding:5px 12px;border-radius:100px;
-}
-.dest-full-body{padding:22px}
-.dest-full-body h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:6px}
-.dest-full-body p{font-size:0.84rem;line-height:1.65;color:var(--muted);margin-bottom:14px}
-.dest-tags{display:flex;gap:6px;flex-wrap:wrap}
-.dest-tag-sm{
-  padding:3px 10px;background:var(--gold-pale);color:var(--gold);
-  font-size:0.72rem;font-weight:600;border-radius:100px;
-}
-.dest-bottom-cta{
-  background:var(--navy);border-radius:8px;padding:56px;
-  text-align:center;color:#fff;margin-bottom:40px;
-}
-.dest-bottom-cta h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;margin-bottom:14px}
-.dest-bottom-cta p{font-size:0.97rem;color:rgba(255,255,255,0.7);margin-bottom:28px;max-width:500px;margin-left:auto;margin-right:auto}
+.filter-btn:hover,.filter-btn.active{background:var(--ink);border-color:var(--ink);color:#fff}
 
-/* ══════════════════════════════
-   HOW IT WORKS PAGE
-══════════════════════════════ */
-.hiw-page{padding:70px 48px;max-width:900px;margin:0 auto}
-.hiw-page-steps{margin-bottom:64px}
+/* How it works page */
+.hiw-page{padding:80px 56px;max-width:900px;margin:0 auto}
+.hiw-steps{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
 .hiw-page-step{
-  display:flex;gap:28px;padding:36px 0;
-  border-bottom:1px solid rgba(0,0,0,0.07);
+  display:grid;grid-template-columns:80px 1fr;gap:32px;
+  padding:40px 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
 }
-.hiw-page-step:last-child{border:none}
-.hiw-num{
-  flex-shrink:0;width:56px;height:56px;
-  border-radius:50%;background:var(--navy);color:var(--gold-light);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;
+.hiw-page-step:last-child{border-bottom:none}
+.hiw-step-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3.2rem;font-weight:300;
+  color:var(--rule-strong);line-height:1;
+  transition:color .3s;
 }
-.hiw-step-body{}
-.hiw-step-body h3{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
-.hiw-step-body p{font-size:0.93rem;line-height:1.78;color:var(--muted)}
-.hiw-why-box{background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:44px}
-.hiw-why-box h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--navy);margin-bottom:24px}
+.hiw-page-step:hover .hiw-step-num{color:var(--ink)}
+.hiw-step-content h3{
+  font-size:1rem;font-weight:600;margin-bottom:10px;letter-spacing:0.01em;
+}
+.hiw-step-content p{
+  font-size:0.9rem;line-height:1.78;color:var(--muted);font-weight:300;
+}
+.hiw-why{
+  margin-top:72px;padding:48px;
+  border:1px solid var(--rule);
+  background:var(--parchment);
+}
+.hiw-why h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.6rem;font-weight:400;margin-bottom:28px;
+}
 .why-list{list-style:none;display:flex;flex-direction:column;gap:14px}
-.why-list li{display:flex;align-items:flex-start;gap:12px;font-size:0.93rem;line-height:1.65;color:var(--muted)}
-.why-check{width:22px;height:22px;border-radius:50%;background:var(--gold-pale);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0;margin-top:1px}
-
-/* ══════════════════════════════
-   CONTACT PAGE
-══════════════════════════════ */
-.contact-page{padding:70px 48px;max-width:900px;margin:0 auto;display:flex;gap:72px}
-.contact-info{flex:1 1 40%}
-.contact-info .section-title{margin-bottom:16px}
-.contact-info p{font-size:0.97rem;line-height:1.82;color:var(--muted);margin-bottom:36px}
-.contact-methods{display:flex;flex-direction:column;gap:22px}
-.contact-method{display:flex;align-items:center;gap:16px}
-.contact-method-icon{
-  width:48px;height:48px;border-radius:50%;
-  background:var(--gold-pale);color:var(--gold);
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+.why-list li{
+  display:flex;align-items:flex-start;gap:14px;
+  font-size:0.88rem;line-height:1.7;color:var(--muted);font-weight:300;
 }
-.contact-method-text strong{display:block;font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:2px}
-.contact-method-text a,.contact-method-text span{font-size:0.9rem;color:var(--muted)}
-.contact-method-text a:hover{color:var(--gold)}
-.contact-form-wrap{flex:1 1 55%}
+.why-check{
+  width:18px;height:18px;border:1px solid var(--cyan);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;color:var(--cyan);flex-shrink:0;margin-top:2px;
+}
 
-/* ══════════════════════════════
-   BOOKING FORM
-══════════════════════════════ */
-.booking-page{padding:70px 48px;max-width:780px;margin:0 auto}
-.booking-page .section-title{margin-bottom:8px}
-.booking-page > p{font-size:0.97rem;color:var(--muted);margin-bottom:40px}
-.form-steps{display:flex;gap:0;margin-bottom:44px;border:1.5px solid var(--border);border-radius:4px;overflow:hidden}
+/* Contact page */
+.contact-page{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--rule);
+  min-height:60vh;
+}
+.contact-info{
+  padding:80px 56px;border-right:1px solid var(--rule);
+}
+.contact-info h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,2.5vw,2.2rem);font-weight:400;
+  letter-spacing:-0.01em;line-height:1.2;margin-bottom:20px;
+}
+.contact-info h2 em{font-style:italic}
+.contact-info p{
+  font-size:0.92rem;line-height:1.82;color:var(--muted);
+  font-weight:300;margin-bottom:40px;max-width:380px;
+}
+.contact-methods{display:flex;flex-direction:column;gap:28px}
+.contact-method{display:flex;flex-direction:column;gap:4px}
+.contact-method strong{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.contact-method a,.contact-method span{font-size:0.92rem;color:var(--ink);font-weight:400}
+.contact-method a:hover{color:var(--cyan)}
+.contact-form-wrap{padding:80px 56px}
+
+/* Booking page */
+.booking-page{padding:80px 56px;max-width:760px;margin:0 auto}
+.booking-page h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;
+  letter-spacing:-0.01em;margin-bottom:8px;
+}
+.booking-page>p{font-size:0.92rem;color:var(--muted);margin-bottom:48px;font-weight:300}
+
+/* Forms */
+.form-steps{
+  display:flex;border:1px solid var(--rule);
+  margin-bottom:48px;
+}
 .form-step-tab{
   flex:1;padding:14px;text-align:center;
-  font-size:0.8rem;font-weight:600;color:var(--muted);
-  background:white;cursor:pointer;transition:all 0.25s;
-  border-right:1.5px solid var(--border);
+  font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);background:none;cursor:pointer;
+  border-right:1px solid var(--rule);transition:all .2s;
 }
 .form-step-tab:last-child{border-right:none}
-.form-step-tab.active{background:var(--navy);color:#fff}
-.form-step-tab.done{background:var(--gold-pale);color:var(--gold)}
+.form-step-tab.active{background:var(--ink);color:#fff}
+.form-step-tab.done{background:var(--parchment);color:var(--ink)}
 .form-panel{display:none}.form-panel.active{display:block}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-group{margin-bottom:20px}
-.form-group label{display:block;font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:6px;letter-spacing:0.02em}
+.form-group{margin-bottom:22px}
+.form-group label{
+  display:block;font-size:0.7rem;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
 .form-group input,.form-group select,.form-group textarea{
   width:100%;padding:12px 14px;
-  border:1.5px solid #e0d9d0;border-radius:3px;
-  font-size:0.92rem;color:var(--text);font-family:'Space Grotesk',sans-serif;
-  outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:#fff;
+  border:1px solid var(--rule-strong);border-radius:0;
+  font-size:0.92rem;color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;
+  outline:none;transition:border-color .2s;background:#fff;
 }
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
-  border-color:var(--gold);box-shadow:0 0 0 3px rgba(0,180,216,0.15);
+  border-color:var(--ink);
 }
-.form-group textarea{min-height:110px;resize:vertical}
-.radio-row{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.radio-row label{display:flex;align-items:center;gap:10px;font-size:0.9rem;font-weight:400;color:var(--muted);cursor:pointer}
-.radio-row input[type="radio"]{accent-color:var(--gold);width:16px;height:16px}
+.form-group textarea{min-height:120px;resize:vertical}
+.radio-row{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.radio-row label{
+  display:flex;align-items:center;gap:10px;
+  font-size:0.88rem;font-weight:400;text-transform:none;
+  letter-spacing:0;color:var(--muted);cursor:pointer;
+}
+.radio-row input[type="radio"]{accent-color:var(--ink);width:15px;height:15px}
 .form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:28px}
 .btn-form-back{
-  background:transparent;color:var(--muted);border:1.5px solid var(--border);
-  padding:12px 28px;font-size:0.88rem;font-weight:500;cursor:pointer;border-radius:2px;
-  transition:all 0.2s;
+  background:none;color:var(--muted);border:1px solid var(--rule-strong);
+  padding:11px 26px;font-size:0.75rem;font-weight:600;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.08em;transition:all .2s;
 }
-.btn-form-back:hover{border-color:var(--navy);color:var(--navy)}
+.btn-form-back:hover{border-color:var(--ink);color:var(--ink)}
 .btn-form-next{
-  background:var(--navy);color:#fff;border:none;
-  padding:12px 32px;font-size:0.88rem;font-weight:600;cursor:pointer;border-radius:2px;
-  transition:all 0.25s;
+  background:var(--ink);color:#fff;border:none;
+  padding:11px 30px;font-size:0.75rem;font-weight:600;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.08em;transition:background .25s;
 }
-.btn-form-next:hover{background:var(--gold);transform:translateY(-1px)}
+.btn-form-next:hover{background:#1a2035}
 .form-success{
-  text-align:center;padding:60px 40px;
-  background:var(--cream);border-radius:6px;border:1px solid var(--border);
+  text-align:center;padding:72px 48px;
+  border:1px solid var(--rule);
 }
-.form-success-icon{font-size:3rem;margin-bottom:16px}
-.form-success h3{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy);margin-bottom:10px}
-.form-success p{font-size:0.95rem;color:var(--muted);line-height:1.75}
-
-/* ══════════════════════════════
-   LEGAL
-══════════════════════════════ */
-.legal-page{padding:70px 48px;max-width:780px;margin:0 auto}
-.legal-page h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--navy);margin-bottom:6px}
-.legal-date{font-size:0.82rem;color:var(--muted);margin-bottom:36px}
-.legal-page h2{font-size:1.05rem;font-weight:700;color:var(--navy);margin:28px 0 10px}
-.legal-page p{font-size:0.93rem;line-height:1.82;color:var(--muted);margin-bottom:12px}
-.legal-page ul{margin:10px 0 14px 20px;display:flex;flex-direction:column;gap:7px}
-.legal-page ul li{font-size:0.93rem;line-height:1.72;color:var(--muted)}
-
-/* ══════════════════════════════
-   FLOATING ELEMENTS
-══════════════════════════════ */
-.back-to-top{
-  position:fixed;bottom:80px;right:28px;z-index:900;
-  width:44px;height:44px;border-radius:50%;
-  background:var(--navy);color:white;border:none;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;opacity:0;transform:translateY(12px);
-  transition:all 0.3s;box-shadow:0 4px 16px rgba(0,0,0,0.2);
-  font-size:1rem;
+.form-success-icon{font-size:2.8rem;margin-bottom:16px}
+.form-success h3{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:400;margin-bottom:12px;
 }
-.back-to-top.show{opacity:1;transform:none}
-.back-to-top:hover{background:var(--gold)}
+.form-success p{font-size:0.9rem;color:var(--muted);line-height:1.75;font-weight:300}
 
-/* ══════════════════════════════
+/* Legal */
+.legal-page{padding:72px 56px;max-width:760px;margin:0 auto}
+.legal-page h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,4vw,3rem);font-weight:400;margin-bottom:8px;
+}
+.legal-date{font-size:0.78rem;color:var(--muted);margin-bottom:40px;font-weight:300}
+.legal-page h2{font-size:0.9rem;font-weight:700;margin:28px 0 10px;letter-spacing:0.02em}
+.legal-page p{font-size:0.88rem;line-height:1.85;color:var(--muted);margin-bottom:12px;font-weight:300}
+.legal-page ul{margin:10px 0 14px 18px;display:flex;flex-direction:column;gap:7px}
+.legal-page ul li{font-size:0.88rem;line-height:1.72;color:var(--muted);font-weight:300}
+
+/* ─────────────────────────────────────────────
+   3D TILT  (applied via JS)
+───────────────────────────────────────────── */
+.tilt-target{will-change:transform}
+
+/* ─────────────────────────────────────────────
    RESPONSIVE
-══════════════════════════════ */
-@media(max-width:900px){
-  nav{padding:16px 24px}
-  nav.scrolled,nav.light{padding:12px 24px}
+───────────────────────────────────────────── */
+@media(max-width:1024px){
+  .section-01{grid-template-columns:120px 1fr}
+  .section-01-right{display:none}
+  .section-03{grid-template-columns:120px 1fr}
+  .section-03-left{grid-column:1/2}
+  .section-03-right{grid-column:1/3;padding:40px 32px 80px}
+  .testi-slide{flex:0 0 80%}
+  .dest-list{grid-template-columns:1fr 1fr}
+  .values-grid{grid-template-columns:1fr 1fr}
+  .value-item:nth-child(3){border-right:1px solid var(--rule)}
+  .value-item:nth-child(2){border-right:none}
+  .value-item:nth-child(4){border-right:none}
+}
+@media(max-width:860px){
+  nav{padding:20px 24px}
+  nav.scrolled,nav.dark-page{padding:14px 24px}
   .nav-links{display:none}
   .hamburger{display:flex}
-  .intro,.hiw,.about-story,.contact-page{flex-direction:column;padding:60px 24px;gap:40px}
-  .intro-gallery{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-  .gallery-img:first-child{grid-row:auto}
-  .gallery-img:first-child img{height:160px}
-  .gallery-img img{height:160px}
-  .stats-grid{grid-template-columns:1fr 1fr;gap:32px}
-  .trust-bar{padding:16px 24px;gap:24px}
-  .trust-divider{display:none}
-  .dest-header{flex-direction:column;gap:20px;padding:0 24px}
-  .dest-track-wrap{padding:8px 24px}
-  .dest-track{gap:14px}
-  .dest-card{flex:0 0 260px}
-  .values-grid{grid-template-columns:1fr}
-  .dest-full-grid{grid-template-columns:1fr 1fr}
-  .form-row{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-right{height:55vw;min-height:280px}
+  .hero-left{padding:48px 24px 60px}
+  .hero-scroll-hint{left:24px}
+  .section-01{grid-template-columns:1fr;padding:0}
+  .section-num{padding:40px 24px 0;border:none;font-size:3rem}
+  .section-01-left,.section-03-left{padding:24px 24px 48px;border:none;grid-column:auto}
+  .section-01-right{display:block;padding:40px 24px 64px;border-top:1px solid var(--rule)}
+  .section-02-header{grid-template-columns:1fr;padding:48px 24px 32px}
+  .section-02-header .section-num{display:none}
+  .section-02-header p{text-align:left}
+  .dest-featured{grid-template-columns:1fr}
+  .dest-featured-img{height:56vw}
+  .dest-featured-info{padding:36px 24px;border-left:none;border-top:1px solid var(--rule)}
+  .dest-list{grid-template-columns:1fr 1fr}
+  .dest-list-item{padding:24px 20px}
+  .dest-more{padding:28px 24px}
+  .section-03{grid-template-columns:1fr}
+  .section-03-left{padding:48px 24px;grid-column:auto}
+  .section-03-right{grid-column:auto;padding:0 24px 64px}
+  .section-04-header,.testi-viewport,.testi-controls{padding-left:24px;padding-right:24px}
+  .testi-slide{flex:0 0 calc(100% - 48px)}
+  .section-05{grid-template-columns:1fr}
+  .section-05-img{height:56vw}
+  .section-05-body{padding:48px 24px;border-left:none;border-top:1px solid var(--rule)}
+  .home-cta-strip{padding:56px 24px;flex-direction:column;align-items:flex-start}
+  footer{padding:48px 24px 32px}
   .footer-grid{grid-template-columns:1fr;gap:32px}
   .footer-bottom{flex-direction:column;align-items:flex-start}
-  .vision{padding:80px 24px}
-  .page-hero{padding:130px 24px 70px}
-  .hiw-left{position:static}
-  .dest-page,.hiw-page,.booking-page,.legal-page{padding:40px 24px}
-  .dest-bottom-cta{padding:40px 28px}
-  .testimonials{padding:70px 24px}
-  .testi-inner{padding:32px 24px}
-  .home-cta{padding:80px 24px}
-  footer{padding:48px 24px 28px}
+  .page-header{padding:120px 24px 56px}
+  .about-story{grid-template-columns:1fr}
+  .about-story-text{padding:56px 24px;border-right:none}
+  .about-story-imgs{height:56vw}
+  .values-grid{grid-template-columns:1fr}
+  .value-item{border-right:none!important}
+  .dest-page-grid{grid-template-columns:1fr 1fr}
+  .dest-page-card:nth-child(2n+1){border-right:1px solid var(--rule)}
+  .dest-page-card:nth-child(2n){border-right:none}
+  .contact-page{grid-template-columns:1fr}
+  .contact-info{border-right:none;border-bottom:1px solid var(--rule);padding:56px 24px}
+  .contact-form-wrap{padding:48px 24px}
+  .hiw-page,.booking-page,.legal-page{padding:48px 24px}
+  .form-row{grid-template-columns:1fr}
+  .form-steps{flex-direction:column}
+  .form-step-tab{border-right:none;border-bottom:1px solid var(--rule)}
+  .form-step-tab:last-child{border-bottom:none}
+  .dest-filters-bar{padding:16px 24px}
+  .stat-row{flex-wrap:wrap;gap:24px}
 }
 @media(max-width:540px){
-  .hero-title{font-size:2.6rem}
-  .dest-full-grid{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .intro-pillars{grid-template-columns:1fr}
-  .form-steps{flex-direction:column}
-  .form-step-tab{border-right:none;border-bottom:1.5px solid var(--border)}
-  .form-step-tab:last-child{border-bottom:none}
+  .dest-list{grid-template-columns:1fr}
+  .dest-list-item:nth-child(n){border-right:none;border-bottom:1px solid var(--rule)}
+  .dest-page-grid{grid-template-columns:1fr}
+  .dest-page-card{border-right:none!important}
+  .values-grid{grid-template-columns:1fr}
+  .hero-headline{font-size:52px}
+  .hero-bottom{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
 <body>
 
-<!-- PAGE TRANSITION OVERLAY -->
-<div id="page-transition"></div>
+<div id="pt"></div>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav id="navbar">
-  <div class="nav-logo" onclick="showPage('home')">
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
     <img src="nexgen-logo.png" alt="NexGen Bookings"/>
   </div>
   <div class="nav-links">
@@ -876,14 +1076,13 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
     <a onclick="showPage('destinations')" id="nav-destinations">Destinations</a>
     <a onclick="showPage('howitworks')" id="nav-howitworks">How It Works</a>
     <a onclick="showPage('contact')" id="nav-contact">Contact</a>
-    <a onclick="showPage('booking')" class="btn-nav">Get Started</a>
+    <button onclick="showPage('booking')" class="nav-cta">Plan a Trip</button>
   </div>
   <div class="hamburger" onclick="toggleMenu()" id="hamburger">
     <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- Mobile Menu -->
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
   <a onclick="showPage('home');toggleMenu()">Home</a>
@@ -891,267 +1090,313 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
   <a onclick="showPage('destinations');toggleMenu()">Destinations</a>
   <a onclick="showPage('howitworks');toggleMenu()">How It Works</a>
   <a onclick="showPage('contact');toggleMenu()">Contact</a>
-  <a onclick="showPage('booking');toggleMenu()" style="color:var(--gold-light)">Get Started →</a>
+  <a onclick="showPage('booking');toggleMenu()">Plan a Trip</a>
 </div>
 
-<!-- Back to Top -->
-<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-
-<!-- ═══════════════════════════════════════
-              HOME PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     HOME PAGE
+════════════════════════════════════ -->
 <div class="page active" id="page-home">
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1600')"></div>
-      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=1600')"></div>
-      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600')"></div>
-      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600')"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-badge"><span></span>Kosher Travel Concierge</div>
-      <h1 class="hero-title">
-        Travel the World<br>the Way You <em>Deserve</em>
+    <div class="hero-left">
+      <div class="hero-eyebrow sr fade">Kosher Travel Concierge · Est. 2024</div>
+      <h1 class="hero-headline sr up">
+        The World<br>at Your<br><em>Table.</em>
       </h1>
-      <p class="hero-sub">Personalized, kosher-friendly travel — custom-built around you. No packages. No pressure. Just exceptional journeys.</p>
-      <div class="hero-actions">
-        <button class="btn-hero-primary" onclick="showPage('booking')">Plan My Trip</button>
-        <button class="btn-hero-ghost" onclick="showPage('howitworks')">How It Works</button>
+      <div class="hero-bottom sr up d2">
+        <p class="hero-desc">
+          Every trip we plan is built from scratch — around your life, your family, and your standards. No packages. No shortcuts.
+        </p>
+        <div class="hero-cta-wrap">
+          <button class="btn-ink" onclick="showPage('booking')">
+            <span>Plan your trip</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-track"></div>
+        Scroll
       </div>
     </div>
-    <div class="slide-dots" id="slideDots"></div>
-    <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+    <div class="hero-right">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=1400&q=85" alt="Paris at dusk"/>
+      <span class="hero-img-caption">Paris, France</span>
+      <span class="hero-issue">NexGen Bookings · 2025</span>
+    </div>
   </section>
 
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      CLIA Accredited Agency
+  <!-- SECTION 01 — WHO WE ARE -->
+  <section class="section-01">
+    <div class="section-num sr fade">01</div>
+    <div class="section-01-left">
+      <h2 class="sr up">Boutique travel built<br>around <em>your</em> life</h2>
+      <p class="sr up d1">
+        We know which kosher restaurant in Rome is worth the reservation and which isn't. We know the hotel in Dubai that has a mezuzah on the door. We know because we've done this long enough to care about the details.
+      </p>
+      <p class="sr up d2">
+        Every itinerary we produce is handbuilt — flights, hotels, transfers, dining, experiences — delivered as a clean digital brief you can access anywhere. One point of contact. No call centres.
+      </p>
+      <div style="margin-top:36px" class="sr up d3">
+        <button class="btn-ink" onclick="showPage('about')">
+          <span>Our story</span><span class="arrow">→</span>
+        </button>
+      </div>
     </div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      24-Hour Response
+    <div class="section-01-right">
+      <ul class="service-list">
+        <li class="sr fade d1">
+          <span class="service-num">—</span>
+          International Flights
+          <span class="service-note">All carriers</span>
+        </li>
+        <li class="sr fade d2">
+          <span class="service-num">—</span>
+          Curated Hotels
+          <span class="service-note">Vetted</span>
+        </li>
+        <li class="sr fade d3">
+          <span class="service-num">—</span>
+          Kosher Dining
+          <span class="service-note">Every destination</span>
+        </li>
+        <li class="sr fade d4">
+          <span class="service-num">—</span>
+          Ground Transfers
+          <span class="service-note">Door to door</span>
+        </li>
+        <li class="sr fade d5">
+          <span class="service-num">—</span>
+          Digital Itinerary
+          <span class="service-note">Always accessible</span>
+        </li>
+      </ul>
     </div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      100% Custom Itineraries
+  </section>
+
+  <!-- SECTION 02 — DESTINATIONS -->
+  <section class="section-02">
+    <div class="section-02-header">
+      <div class="section-num sr fade">02</div>
+      <div>
+        <h2 class="sr up">Where we take you</h2>
+      </div>
+      <p class="sr right">Every itinerary is custom. These are destinations our clients return to.</p>
     </div>
-    <div class="trust-divider"></div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      Kosher Travel Specialists
+
+    <!-- Featured -->
+    <div class="dest-featured tilt-target">
+      <div class="dest-featured-img">
+        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&q=85" alt="Rome"/>
+      </div>
+      <div class="dest-featured-info sr up">
+        <div>
+          <div class="dest-region-tag">Europe · Italy</div>
+          <h3>Rome</h3>
+          <p>History, marble, and a Jewish quarter that's been here longer than most cities. We plan Rome properly — the Colosseum and the hidden trattoria your guidebook missed.</p>
+        </div>
+        <button class="dest-link" onclick="showPage('booking')">Plan this trip →</button>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="dest-list">
+      <div class="dest-list-item tilt-target sr fade d1" onclick="showPage('booking')">
+        <div class="dest-list-city">Paris</div>
+        <div class="dest-list-country">France · Europe</div>
+        <div class="dest-list-tags">
+          <span class="dest-list-tag">Couples</span>
+          <span class="dest-list-tag">Family</span>
+        </div>
+      </div>
+      <div class="dest-list-item tilt-target sr fade d2" onclick="showPage('booking')">
+        <div class="dest-list-city">Dubai</div>
+        <div class="dest-list-country">UAE · Middle East</div>
+        <div class="dest-list-tags">
+          <span class="dest-list-tag">Luxury</span>
+          <span class="dest-list-tag">Honeymoon</span>
+        </div>
+      </div>
+      <div class="dest-list-item tilt-target sr fade d3" onclick="showPage('booking')">
+        <div class="dest-list-city">Paphos</div>
+        <div class="dest-list-country">Cyprus · Mediterranean</div>
+        <div class="dest-list-tags">
+          <span class="dest-list-tag">Beach</span>
+          <span class="dest-list-tag">Weekend</span>
+        </div>
+      </div>
+      <div class="dest-list-item tilt-target sr fade d4" onclick="showPage('booking')">
+        <div class="dest-list-city">Cancún</div>
+        <div class="dest-list-country">Mexico · Caribbean</div>
+        <div class="dest-list-tags">
+          <span class="dest-list-tag">Resort</span>
+          <span class="dest-list-tag">Family</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-more sr fade">
+      <p>18 destinations served · All itineraries custom-built</p>
+      <button class="btn-ink" onclick="showPage('destinations')">
+        <span>View all destinations</span><span class="arrow">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- SECTION 03 — HOW IT WORKS -->
+  <section class="section-03">
+    <div class="section-num sr fade">03</div>
+    <div class="section-03-left">
+      <h2 class="sr up">From first message<br>to boarding pass —<br><em>we handle it.</em></h2>
+      <div style="margin-top:40px" class="sr up d2">
+        <button class="btn-ink" onclick="showPage('howitworks')">
+          <span>The full process</span><span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+    <div class="section-03-right">
+      <div class="process-step sr up d1">
+        <div class="process-step-num">1</div>
+        <div class="process-step-body">
+          <h4>You share the details</h4>
+          <p>Destination, dates, group size, budget, and any preferences. Kosher requirements. Special occasions. We ask the right questions.</p>
+        </div>
+      </div>
+      <div class="process-step sr up d2">
+        <div class="process-step-num">2</div>
+        <div class="process-step-body">
+          <h4>We build your itinerary</h4>
+          <p>A real person researches and curates — flights, hotels, dining, logistics. No algorithms.</p>
+        </div>
+      </div>
+      <div class="process-step sr up d3">
+        <div class="process-step-num">3</div>
+        <div class="process-step-body">
+          <h4>You review and refine</h4>
+          <p>We adjust until everything is right. Nothing is booked until you say so.</p>
+        </div>
+      </div>
+      <div class="process-step sr up d4">
+        <div class="process-step-num">4</div>
+        <div class="process-step-body">
+          <h4>We handle everything</h4>
+          <p>All bookings, confirmations, and coordination handled by us, not by you.</p>
+        </div>
+      </div>
+      <div class="process-step sr up d5">
+        <div class="process-step-num">5</div>
+        <div class="process-step-body">
+          <h4>Your digital itinerary arrives</h4>
+          <p>Every reservation and detail in one clean app — accessible before and during your trip.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 04 — TESTIMONIALS -->
+  <section class="section-04">
+    <div class="section-04-header sr fade">
+      <h2>What clients say</h2>
+      <span class="label">Client testimonials</span>
+    </div>
+    <div class="testi-viewport">
+      <div class="testi-rail" id="testiRail">
+        <div class="testi-slide tilt-target">
+          <div class="testi-mark">"</div>
+          <p class="testi-text">NexGen Bookings took care of everything — from flights and hotels to finding kosher restaurants at every stop. Our Paris trip was beyond anything we imagined. We'll never plan a trip without them again.</p>
+          <div class="testi-byline">
+            <div class="testi-avatar">SR</div>
+            <div class="testi-who"><strong>Sarah R.</strong><span>Paris, Family Trip</span></div>
+          </div>
+        </div>
+        <div class="testi-slide tilt-target">
+          <div class="testi-mark">"</div>
+          <p class="testi-text">We used NexGen for our honeymoon in Dubai and it was perfect. Every detail was taken care of — the hotel was stunning and everything was kosher-certified. Truly a 5-star experience.</p>
+          <div class="testi-byline">
+            <div class="testi-avatar">MK</div>
+            <div class="testi-who"><strong>Moshe & Rivka K.</strong><span>Dubai Honeymoon</span></div>
+          </div>
+        </div>
+        <div class="testi-slide tilt-target">
+          <div class="testi-mark">"</div>
+          <p class="testi-text">As someone who travels frequently, NexGen Bookings is in a league of their own. The digital itinerary alone is worth it — everything organised perfectly in one place.</p>
+          <div class="testi-byline">
+            <div class="testi-avatar">YL</div>
+            <div class="testi-who"><strong>Yosef L.</strong><span>Rome & Venice</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-controls">
+      <div class="testi-arrows">
+        <button class="testi-arr" id="testiPrev" onclick="moveTesti(-1)">←</button>
+        <button class="testi-arr" id="testiNext" onclick="moveTesti(1)">→</button>
+      </div>
+      <div class="testi-progress-wrap" id="testiProgressWrap"></div>
+      <span class="testi-count" id="testiCount">01 / 03</span>
+    </div>
+  </section>
+
+  <!-- SECTION 05 — VISION / PROMISE -->
+  <section class="section-05">
+    <div class="section-05-img">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=85" alt="Beach horizon" id="visionImg"/>
+    </div>
+    <div class="section-05-body">
+      <div class="section-label-sm sr fade">Our Commitment</div>
+      <h2 class="sr up">Kosher travel that's<br>actually <em>affordable.</em></h2>
+      <p class="sr up d1">
+        Premium, stress-free travel for the Jewish community — without the premium price that usually comes with it. We believe a custom trip should be accessible, not a luxury only some can afford.
+      </p>
+      <div class="sr up d2">
+        <button class="btn-ink" onclick="showPage('about')">
+          <span>Learn more</span><span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="stat-row sr up d3">
+        <div class="stat-item-sm">
+          <div class="stat-num-sm" data-count="18">0</div>
+          <div class="stat-label-sm">Destinations</div>
+        </div>
+        <div class="stat-item-sm">
+          <div class="stat-num-sm" data-count="98">0</div>
+          <div class="stat-label-sm">% Satisfaction</div>
+        </div>
+        <div class="stat-item-sm">
+          <div class="stat-num-sm">24h</div>
+          <div class="stat-label-sm">Response time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="home-cta-strip sr fade">
+    <h2>Ready to plan something <em>worth remembering?</em></h2>
+    <div class="cta-actions">
+      <button class="btn-ink" onclick="showPage('booking')">
+        <span>Get started</span><span class="arrow">→</span>
+      </button>
+      <button class="btn-ink" onclick="showPage('contact')" style="border-color:var(--rule-strong);color:var(--muted)">
+        <span>Ask a question</span>
+      </button>
     </div>
   </div>
-
-  <!-- INTRO -->
-  <section class="intro">
-    <div class="intro-text reveal-left">
-      <div class="section-label">Who We Are</div>
-      <h2 class="section-title">Boutique Travel, Built Around <em>You</em></h2>
-      <p style="margin-top:18px">At NexGen Bookings, we design custom trips with clarity, transparency, and real human support. No mass packages, no pushy sales — just thoughtfully planned travel that fits your life.</p>
-      <p>Whether it's a family vacation, honeymoon, or special occasion, we handle every detail — flights, hotels, kosher dining, transfers — so you can focus on the experience.</p>
-      <div class="intro-pillars">
-        <div class="pillar reveal delay-1">
-          <div class="pillar-icon">✈</div>
-          <div class="pillar-title">Personalized Planning</div>
-          <div class="pillar-body">Every trip is custom-built from scratch around your preferences.</div>
-        </div>
-        <div class="pillar reveal delay-2">
-          <div class="pillar-icon">✡</div>
-          <div class="pillar-title">Kosher Expertise</div>
-          <div class="pillar-body">Deep knowledge of kosher-friendly hotels, restaurants, and destinations worldwide.</div>
-        </div>
-        <div class="pillar reveal delay-3">
-          <div class="pillar-icon">💬</div>
-          <div class="pillar-title">Real Human Support</div>
-          <div class="pillar-body">You work with a real person, start to finish — not a chatbot or algorithm.</div>
-        </div>
-        <div class="pillar reveal delay-4">
-          <div class="pillar-icon">📱</div>
-          <div class="pillar-title">Digital Itinerary</div>
-          <div class="pillar-body">Your full trip plan in a beautiful app — always at your fingertips.</div>
-        </div>
-      </div>
-    </div>
-    <div class="intro-gallery reveal-right">
-      <div class="gallery-img">
-        <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600" alt="Travel"/>
-      </div>
-      <div class="gallery-img">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600" alt="Beach"/>
-      </div>
-      <div class="gallery-img">
-        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600" alt="Rome"/>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <section class="stats-section">
-    <div class="stats-grid">
-      <div class="stat-item reveal">
-        <div class="stat-num" data-count="18">0</div>
-        <div class="stat-label">Destinations Served</div>
-      </div>
-      <div class="stat-item reveal delay-1">
-        <div class="stat-num" data-count="98">0</div>
-        <div class="stat-label" style="white-space:nowrap">% Client Satisfaction</div>
-      </div>
-      <div class="stat-item reveal delay-2">
-        <div class="stat-num">24h</div>
-        <div class="stat-label">Response Time</div>
-      </div>
-      <div class="stat-item reveal delay-3">
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Custom Itineraries</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- VISION -->
-  <section class="vision">
-    <div class="vision-bg" id="visionBg"></div>
-    <div class="vision-inner">
-      <div class="section-label reveal">Our Vision</div>
-      <h2 class="reveal delay-1">Making Kosher Travel <em>Seamless,</em> Affordable & Unforgettable</h2>
-      <p class="reveal delay-2">We combine personalized concierge service with modern tools to plan every detail of your journey — from flights and hotels to curated local experiences — so you can focus entirely on enjoying your trip. Our goal is luxurious, stress-free travel for the Jewish community, without the premium price.</p>
-      <button class="btn-gold reveal delay-3" onclick="showPage('about')">Our Story</button>
-    </div>
-  </section>
-
-  <!-- DESTINATIONS CAROUSEL -->
-  <section class="destinations-section">
-    <div class="dest-header reveal">
-      <div>
-        <div class="section-label">Where We Go</div>
-        <h2 class="section-title">Popular <em>Destinations</em></h2>
-        <p class="section-body" style="margin-top:12px">Every itinerary is fully custom. These are destinations our clients love most.</p>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:14px">
-        <div class="dest-nav">
-          <button class="dest-arrow" id="destPrev" onclick="slideDestinations(-1)">←</button>
-          <button class="dest-arrow" id="destNext" onclick="slideDestinations(1)">→</button>
-        </div>
-        <button class="btn-outline" onclick="showPage('destinations')" style="font-size:0.82rem;padding:10px 22px">View All Destinations</button>
-      </div>
-    </div>
-    <div class="dest-track-wrap">
-      <div class="dest-track" id="destTrack">
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Europe</span><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=600" alt="Paris"/></div>
-          <div class="dest-card-body"><h3>Paris, France</h3><p>Elegance, culture, and excellent kosher dining. Perfect for couples, families, and first-time European travelers.</p></div>
-          <div class="dest-card-footer"><span>Popular pick</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Europe</span><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600" alt="Rome"/></div>
-          <div class="dest-card-body"><h3>Rome, Italy</h3><p>History, architecture, and unforgettable atmosphere. A destination that never disappoints.</p></div>
-          <div class="dest-card-footer"><span>Highly requested</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Middle East</span><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600" alt="Dubai"/></div>
-          <div class="dest-card-body"><h3>Dubai, UAE</h3><p>World-class luxury with excellent kosher options. Ideal for premium travel and unforgettable experiences.</p></div>
-          <div class="dest-card-footer"><span>Luxury travel</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Mediterranean</span><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="Cyprus"/></div>
-          <div class="dest-card-body"><h3>Paphos, Cyprus</h3><p>Relaxed coastal beauty with kosher-friendly planning. A perfect leisure escape.</p></div>
-          <div class="dest-card-footer"><span>Weekend getaway</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Caribbean</span><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=600" alt="Cancun"/></div>
-          <div class="dest-card-body"><h3>Cancun, Mexico</h3><p>Crystal-clear waters, white sand beaches, and luxury resorts. A perennial favorite.</p></div>
-          <div class="dest-card-footer"><span>Beach &amp; resort</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Europe</span><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600" alt="Venice"/></div>
-          <div class="dest-card-body"><h3>Venice, Italy</h3><p>Unique, unforgettable, and perfect for special occasions. Pure magic on the water.</p></div>
-          <div class="dest-card-footer"><span>Special occasions</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Americas</span><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600" alt="Panama"/></div>
-          <div class="dest-card-body"><h3>Panama City</h3><p>A dynamic destination offering culture, nature, and city experiences with kosher access.</p></div>
-          <div class="dest-card-footer"><span>Unique &amp; vibrant</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-        <div class="dest-card">
-          <div class="dest-card-img"><span class="dest-tag">Europe</span><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600" alt="Milan"/></div>
-          <div class="dest-card-body"><h3>Milan, Italy</h3><p>Fashion, design, and modern elegance. Iconic landmarks and world-class shopping await.</p></div>
-          <div class="dest-card-footer"><span>Style &amp; culture</span><a onclick="showPage('booking')">Plan this trip →</a></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials">
-    <div class="testi-header reveal">
-      <div>
-        <div class="section-label">What Clients Say</div>
-        <h2 class="section-title">Trusted by Travelers <em>Like You</em></h2>
-      </div>
-      <div class="testi-controls">
-        <button class="testi-arrow" id="testiPrev" onclick="slideTesti(-1)">←</button>
-        <button class="testi-arrow" id="testiNext" onclick="slideTesti(1)">→</button>
-      </div>
-    </div>
-    <div class="testi-track-wrap">
-      <div class="testi-track" id="testiTrack">
-        <div class="testi-card">
-          <div class="testi-inner">
-            <div class="testi-stars">★★★★★</div>
-            <p class="testi-quote">"NexGen Bookings took care of everything — from our flights and hotels to finding kosher restaurants at every stop. Our Paris trip was beyond anything we imagined. We'll never plan a trip without them again."</p>
-            <div class="testi-author"><div class="testi-avatar">SR</div><div class="testi-name"><strong>Sarah R.</strong><span>Paris, Family Trip</span></div></div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-inner">
-            <div class="testi-stars">★★★★★</div>
-            <p class="testi-quote">"We used NexGen for our honeymoon in Dubai and it was absolutely perfect. Every detail was taken care of — the hotel was stunning and everything was kosher-certified. Truly a 5-star experience."</p>
-            <div class="testi-author"><div class="testi-avatar">MK</div><div class="testi-name"><strong>Moshe & Rivka K.</strong><span>Dubai Honeymoon</span></div></div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="testi-inner">
-            <div class="testi-stars">★★★★★</div>
-            <p class="testi-quote">"As someone who travels frequently for business and pleasure, NexGen Bookings is in a league of their own. The digital itinerary alone is worth it — everything organized perfectly in one place."</p>
-            <div class="testi-author"><div class="testi-avatar">YL</div><div class="testi-name"><strong>Yosef L.</strong><span>Rome & Venice</span></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-progress" id="testiProgress"></div>
-    <div class="testi-dots" id="testiDots" style="display:none"></div>
-  </section>
-
-  <!-- HOME CTA -->
-  <section class="home-cta">
-    <div class="home-cta-inner">
-      <div class="section-label reveal">Ready to Travel?</div>
-      <h2 class="section-title reveal delay-1">Let's Plan Your <em>Perfect Trip</em></h2>
-      <p class="section-body reveal delay-2">Share your travel vision with us and we'll design a personalized kosher itinerary — flights, hotels, experiences — tailored entirely to you.</p>
-      <div class="cta-group reveal delay-3">
-        <button class="btn-primary" onclick="showPage('booking')">Get Started Now</button>
-        <button class="btn-outline" onclick="showPage('contact')">Ask a Question</button>
-      </div>
-    </div>
-  </section>
 
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
         <img src="nexgen-logo-square.png" alt="NexGen Bookings"/>
-        <p>Kosher travel concierge and vacation planning for the modern Jewish traveler. Personalized, affordable, and stress-free.</p>
+        <p>Kosher travel concierge for the modern Jewish traveler. Every trip built from scratch.</p>
       </div>
       <div class="footer-col">
         <h4>Navigate</h4>
         <ul>
           <li><a onclick="showPage('home')">Home</a></li>
-          <li><a onclick="showPage('about')">About Us</a></li>
+          <li><a onclick="showPage('about')">About</a></li>
           <li><a onclick="showPage('destinations')">Destinations</a></li>
           <li><a onclick="showPage('howitworks')">How It Works</a></li>
           <li><a onclick="showPage('contact')">Contact</a></li>
@@ -1162,271 +1407,286 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <ul>
           <li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li>
           <li>CLIA Accredited Agency</li>
-          <li><a onclick="showPage('terms')">Terms &amp; Conditions</a></li>
+          <li><a onclick="showPage('terms')">Terms & Conditions</a></li>
           <li><a onclick="showPage('privacy')">Privacy Policy</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2025 Nexgen Bookings LLC &mdash; Independent Travel Advisor</span>
+      <span>© 2025 Nexgen Bookings LLC — Independent Travel Advisor</span>
+      <span class="footer-accreditation">CLIA Accredited · All itineraries custom-built</span>
       <div class="footer-bottom-links">
         <a onclick="showPage('terms')">Terms</a>
         <a onclick="showPage('privacy')">Privacy</a>
-        <a onclick="showPage('contact')">Contact</a>
       </div>
     </div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-              ABOUT PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     ABOUT PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-about">
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <div class="section-label">Our Story</div>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Our Story</div>
       <h1>Who We <em>Are</em></h1>
-      <p>A boutique travel concierge built on expertise, trust, and a genuine passion for the Jewish community.</p>
+      <p>A boutique travel concierge built on expertise, honesty, and a genuine understanding of what Jewish travelers actually need.</p>
     </div>
   </div>
+
   <div class="about-story">
-    <div class="about-story-text reveal-left">
-      <div class="section-label">The NexGen Story</div>
-      <h2 class="section-title">Travel That Feels <em>Personal</em></h2>
-      <p style="margin-top:18px">NexGen Bookings is a kosher travel concierge dedicated to creating seamless, affordable, and elevated travel experiences for the Jewish community. We specialize in planning and booking kosher-friendly vacations that combine comfort, value, and attention to detail — without the high price tag typically associated with full-service travel planning.</p>
-      <p>Our focus is simple: we handle every aspect of your trip so you don't have to. From flights and hotels to transportation and curated experiences, we manage everything from start to finish while ensuring your destination meets your kosher and Jewish lifestyle needs.</p>
-      <p>Every client receives a beautiful, app-based digital itinerary — your complete travel plan in one organized, always-accessible place. Reservations, confirmations, and trip details right at your fingertips, before and during your journey.</p>
-    </div>
-    <div class="about-story-imgs reveal-right">
-      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800" alt="Beach resort"/>
-      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800" alt="Mountain resort"/>
-    </div>
-  </div>
-  <div class="about-values">
-    <div class="about-values-inner">
-      <h2 class="reveal">What We Stand For</h2>
-      <div class="values-grid">
-        <div class="value-card reveal delay-1">
-          <div class="value-icon">🤝</div>
-          <h3>Honest & Transparent</h3>
-          <p>Clear pricing, no hidden fees, and straightforward communication from your first inquiry to your last day of travel.</p>
-        </div>
-        <div class="value-card reveal delay-2">
-          <div class="value-icon">✡️</div>
-          <h3>Kosher-First Mindset</h3>
-          <p>We understand kosher travel requirements deeply — from certified restaurants to Shabbat logistics — so you never have to worry.</p>
-        </div>
-        <div class="value-card reveal delay-3">
-          <div class="value-icon">💎</div>
-          <h3>Luxury Without the Price</h3>
-          <p>We believe premium experiences should be accessible. We secure the best value without sacrificing quality.</p>
-        </div>
-        <div class="value-card reveal delay-1">
-          <div class="value-icon">🗺️</div>
-          <h3>End-to-End Service</h3>
-          <p>From the first planning call to your return flight home, we're with you every step of the journey.</p>
-        </div>
-        <div class="value-card reveal delay-2">
-          <div class="value-icon">📱</div>
-          <h3>Modern Travel Tools</h3>
-          <p>Your complete itinerary delivered as a beautiful digital app — organized, accessible, and elegant.</p>
-        </div>
-        <div class="value-card reveal delay-3">
-          <div class="value-icon">👨‍👩‍👧‍👦</div>
-          <h3>Community Focused</h3>
-          <p>We're part of the community we serve. We understand your lifestyle, values, and what truly matters when you travel.</p>
-        </div>
+    <div class="about-story-text">
+      <div class="section-label-sm sr fade">The NexGen Story</div>
+      <h2 class="sr up">Travel that feels <em>personal</em></h2>
+      <p class="sr up d1">NexGen Bookings is a kosher travel concierge dedicated to creating seamless, affordable, and genuinely elevated travel experiences for the Jewish community. We specialize in planning and booking kosher-friendly vacations that combine comfort, value, and attention to the details that actually matter.</p>
+      <p class="sr up d2">Our focus is simple: we handle every aspect of your trip so you don't have to. Flights, hotels, transportation, and curated experiences — managed start to finish, with your kosher and Jewish lifestyle requirements built in from the beginning.</p>
+      <p class="sr up d3">Every client receives a beautiful digital itinerary — your complete travel plan in one organized, always-accessible place. All reservations and confirmations, right at your fingertips, before and during your journey.</p>
+      <div style="margin-top:36px" class="sr up d4">
+        <button class="btn-ink" onclick="showPage('booking')">
+          <span>Plan a trip with us</span><span class="arrow">→</span>
+        </button>
       </div>
     </div>
+    <div class="about-story-imgs">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80" alt="Beach resort"/>
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Mountains"/>
+    </div>
   </div>
-  <div style="text-align:center;padding:72px 48px;background:var(--warm-white)">
-    <div class="section-label" style="justify-content:center">Start Planning</div>
-    <h2 class="section-title" style="margin-bottom:20px">Ready to Travel With Us?</h2>
-    <p class="section-body" style="margin:0 auto 32px;text-align:center">Let's build your perfect trip together — personalized, kosher-friendly, and exactly the way you want it.</p>
-    <button class="btn-primary" onclick="showPage('booking')">Get Started</button>
+
+  <div class="values-grid">
+    <div class="value-item sr up">
+      <div class="value-icon">🤝</div>
+      <h3>Honest & Transparent</h3>
+      <p>Clear pricing, no hidden fees, and straightforward communication from your first inquiry to your last day of travel.</p>
+    </div>
+    <div class="value-item sr up d1">
+      <div class="value-icon">✡️</div>
+      <h3>Kosher-First Mindset</h3>
+      <p>We understand kosher travel requirements deeply — from certified restaurants to Shabbat logistics — so you never have to worry.</p>
+    </div>
+    <div class="value-item sr up d2">
+      <div class="value-icon">💎</div>
+      <h3>Luxury Without the Price</h3>
+      <p>We believe premium experiences should be accessible. We secure the best value without sacrificing quality.</p>
+    </div>
+    <div class="value-item sr up d3">
+      <div class="value-icon">🗺️</div>
+      <h3>End-to-End Service</h3>
+      <p>From the first planning call to your return flight home, we're with you every step of the journey.</p>
+    </div>
+    <div class="value-item sr up d4">
+      <div class="value-icon">📱</div>
+      <h3>Modern Travel Tools</h3>
+      <p>Your complete itinerary delivered as a beautiful digital app — organized, accessible, and elegant.</p>
+    </div>
+    <div class="value-item sr up d5">
+      <div class="value-icon">👨‍👩‍👧‍👦</div>
+      <h3>Community Focused</h3>
+      <p>We're part of the community we serve. We understand your lifestyle, values, and what truly matters when you travel.</p>
+    </div>
   </div>
+
+  <div class="home-cta-strip sr fade">
+    <h2>Ready to travel <em>with us?</em></h2>
+    <div class="cta-actions">
+      <button class="btn-ink" onclick="showPage('booking')">
+        <span>Get started</span><span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
   <footer>
     <div class="footer-grid">
-      <div class="footer-brand">
-        <img src="nexgen-logo-square.png" alt="NexGen Bookings"/>
-        <p>Kosher travel concierge and vacation planning for the modern Jewish traveler.</p>
-      </div>
+      <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen Bookings"/><p>Kosher travel concierge for the modern Jewish traveler.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-           DESTINATIONS PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     DESTINATIONS PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-destinations">
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <div class="section-label">Where We Go</div>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Where We Go</div>
       <h1>Explore <em>Destinations</em></h1>
-      <p>Every journey is thoughtfully customized. These are destinations we specialize in — each planned with kosher travel in mind.</p>
+      <p>Every journey is custom-built. These are the destinations we know best — each planned with kosher travel in mind.</p>
     </div>
   </div>
-  <div class="dest-page">
-    <div class="dest-filters reveal">
-      <button class="filter-btn active" onclick="filterDest(this,'all')">All Destinations</button>
-      <button class="filter-btn" onclick="filterDest(this,'europe')">Europe</button>
-      <button class="filter-btn" onclick="filterDest(this,'mideast')">Middle East</button>
-      <button class="filter-btn" onclick="filterDest(this,'americas')">Americas</button>
-      <button class="filter-btn" onclick="filterDest(this,'mediterranean')">Mediterranean</button>
+
+  <div class="dest-filters-bar">
+    <button class="filter-btn active" onclick="filterDest(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterDest(this,'europe')">Europe</button>
+    <button class="filter-btn" onclick="filterDest(this,'mideast')">Middle East</button>
+    <button class="filter-btn" onclick="filterDest(this,'americas')">Americas</button>
+    <button class="filter-btn" onclick="filterDest(this,'mediterranean')">Mediterranean</button>
+  </div>
+
+  <div class="dest-page-grid" id="destGrid">
+    <div class="dest-page-card sr up" data-region="europe" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=700&q=80" alt="Paris"/></div>
+      <div class="dest-page-card-body"><div class="region">Europe</div><h3>Paris</h3><p>Elegance, culture, and some of Europe's best kosher dining. From boutique hotels to curated city experiences.</p><div class="dest-page-tags"><span class="dpt">Couples</span><span class="dpt">Family</span><span class="dpt">Kosher Dining</span></div></div>
     </div>
-    <div class="dest-full-grid" id="destGrid">
-      <div class="dest-full-card reveal" data-region="europe">
-        <div class="dest-full-img"><span class="dest-region">Europe</span><img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=600" alt="Paris"/></div>
-        <div class="dest-full-body"><h3>Paris, France</h3><p>Elegance, culture, and some of Europe's best kosher dining. From boutique hotels to curated city experiences, Paris is a perennial favorite.</p><div class="dest-tags"><span class="dest-tag-sm">Couples</span><span class="dest-tag-sm">Family</span><span class="dest-tag-sm">Kosher Dining</span></div></div>
-      </div>
-      <div class="dest-full-card reveal delay-1" data-region="europe">
-        <div class="dest-full-img"><span class="dest-region">Europe</span><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600" alt="Rome"/></div>
-        <div class="dest-full-body"><h3>Rome, Italy</h3><p>History, architecture, and unforgettable atmosphere. We plan Rome itineraries combining cultural highlights and thoughtful logistics.</p><div class="dest-tags"><span class="dest-tag-sm">History</span><span class="dest-tag-sm">Culture</span><span class="dest-tag-sm">Family</span></div></div>
-      </div>
-      <div class="dest-full-card reveal delay-2" data-region="europe">
-        <div class="dest-full-img"><span class="dest-region">Europe</span><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600" alt="Venice"/></div>
-        <div class="dest-full-body"><h3>Venice, Italy</h3><p>Unique and unforgettable. Venice is ideal for special occasions and refined travel — carefully planned for ease and elegance.</p><div class="dest-tags"><span class="dest-tag-sm">Honeymoon</span><span class="dest-tag-sm">Special Occasions</span></div></div>
-      </div>
-      <div class="dest-full-card reveal" data-region="mideast">
-        <div class="dest-full-img"><span class="dest-region">Middle East</span><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600" alt="Dubai"/></div>
-        <div class="dest-full-body"><h3>Dubai, UAE</h3><p>A modern luxury destination with world-class hotels, incredible experiences, and growing kosher options. Perfect for premium travel.</p><div class="dest-tags"><span class="dest-tag-sm">Luxury</span><span class="dest-tag-sm">Premium</span><span class="dest-tag-sm">Kosher</span></div></div>
-      </div>
-      <div class="dest-full-card reveal delay-1" data-region="mediterranean">
-        <div class="dest-full-img"><span class="dest-region">Mediterranean</span><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="Cyprus"/></div>
-        <div class="dest-full-body"><h3>Paphos, Cyprus</h3><p>A relaxed Mediterranean escape with coastal beauty and kosher-friendly planning. A great weekend getaway, especially from Israel.</p><div class="dest-tags"><span class="dest-tag-sm">Leisure</span><span class="dest-tag-sm">Beach</span><span class="dest-tag-sm">Weekend</span></div></div>
-      </div>
-      <div class="dest-full-card reveal delay-2" data-region="americas">
-        <div class="dest-full-img"><span class="dest-region">Americas</span><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600" alt="Panama"/></div>
-        <div class="dest-full-body"><h3>Panama City</h3><p>A dynamic destination offering culture, nature, and city experiences — well-suited for travelers wanting something unique.</p><div class="dest-tags"><span class="dest-tag-sm">Adventure</span><span class="dest-tag-sm">Unique</span><span class="dest-tag-sm">Culture</span></div></div>
-      </div>
-      <div class="dest-full-card reveal" data-region="americas">
-        <div class="dest-full-img"><span class="dest-region">Caribbean</span><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=600" alt="Cancun"/></div>
-        <div class="dest-full-body"><h3>Cancun, Mexico</h3><p>Crystal-clear waters, white sandy beaches, and luxury resorts. From snorkeling to ancient ruins — Cancun has it all.</p><div class="dest-tags"><span class="dest-tag-sm">Beach</span><span class="dest-tag-sm">Resort</span><span class="dest-tag-sm">Family</span></div></div>
-      </div>
-      <div class="dest-full-card reveal delay-1" data-region="europe">
-        <div class="dest-full-img"><span class="dest-region">Europe</span><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600" alt="Milan"/></div>
-        <div class="dest-full-body"><h3>Milan, Italy</h3><p>Italy's capital of fashion and design. Iconic landmarks, world-class shopping, and an elegant urban experience.</p><div class="dest-tags"><span class="dest-tag-sm">Fashion</span><span class="dest-tag-sm">Culture</span><span class="dest-tag-sm">Luxury</span></div></div>
-      </div>
+    <div class="dest-page-card sr up d1" data-region="europe" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=700&q=80" alt="Rome"/></div>
+      <div class="dest-page-card-body"><div class="region">Europe</div><h3>Rome</h3><p>History, architecture, and unforgettable atmosphere. We plan Rome combining cultural highlights and thoughtful logistics.</p><div class="dest-page-tags"><span class="dpt">History</span><span class="dpt">Culture</span><span class="dpt">Family</span></div></div>
     </div>
-    <div class="dest-bottom-cta reveal">
-      <h2>Don't See Your Destination?</h2>
-      <p>We plan kosher-friendly travel worldwide. If you have a destination in mind, we'll create a custom itinerary tailored specifically to you.</p>
-      <button class="btn-gold" onclick="showPage('booking')">Plan a Custom Trip</button>
+    <div class="dest-page-card sr up d2" data-region="europe" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=700&q=80" alt="Venice"/></div>
+      <div class="dest-page-card-body"><div class="region">Europe</div><h3>Venice</h3><p>Unique and unforgettable. Ideal for special occasions and refined travel — carefully planned for ease and elegance.</p><div class="dest-page-tags"><span class="dpt">Honeymoon</span><span class="dpt">Special Occasions</span></div></div>
+    </div>
+    <div class="dest-page-card sr up" data-region="mideast" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80" alt="Dubai"/></div>
+      <div class="dest-page-card-body"><div class="region">Middle East</div><h3>Dubai</h3><p>A modern luxury destination with world-class hotels, incredible experiences, and growing kosher options.</p><div class="dest-page-tags"><span class="dpt">Luxury</span><span class="dpt">Premium</span></div></div>
+    </div>
+    <div class="dest-page-card sr up d1" data-region="mediterranean" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Cyprus"/></div>
+      <div class="dest-page-card-body"><div class="region">Mediterranean</div><h3>Paphos, Cyprus</h3><p>A relaxed Mediterranean escape with coastal beauty and kosher-friendly planning.</p><div class="dest-page-tags"><span class="dpt">Leisure</span><span class="dpt">Beach</span><span class="dpt">Weekend</span></div></div>
+    </div>
+    <div class="dest-page-card sr up d2" data-region="americas" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=700&q=80" alt="Panama"/></div>
+      <div class="dest-page-card-body"><div class="region">Americas</div><h3>Panama City</h3><p>A dynamic destination offering culture, nature, and city experiences — well-suited for travelers wanting something different.</p><div class="dest-page-tags"><span class="dpt">Adventure</span><span class="dpt">Unique</span></div></div>
+    </div>
+    <div class="dest-page-card sr up" data-region="americas" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=700&q=80" alt="Cancun"/></div>
+      <div class="dest-page-card-body"><div class="region">Caribbean</div><h3>Cancún</h3><p>Crystal-clear waters, white sandy beaches, and luxury resorts. From snorkeling to ancient ruins.</p><div class="dest-page-tags"><span class="dpt">Beach</span><span class="dpt">Resort</span><span class="dpt">Family</span></div></div>
+    </div>
+    <div class="dest-page-card sr up d1" data-region="europe" onclick="showPage('booking')">
+      <div class="dest-page-card-img"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80" alt="Milan"/></div>
+      <div class="dest-page-card-body"><div class="region">Europe</div><h3>Milan</h3><p>Italy's capital of fashion and design. Iconic landmarks, world-class shopping, and an elegant urban experience.</p><div class="dest-page-tags"><span class="dpt">Fashion</span><span class="dpt">Luxury</span></div></div>
     </div>
   </div>
+
+  <div class="home-cta-strip sr fade">
+    <h2>Don't see your destination? <em>We go anywhere.</em></h2>
+    <button class="btn-ink" onclick="showPage('booking')"><span>Plan a custom trip</span><span class="arrow">→</span></button>
+  </div>
+
   <footer>
     <div class="footer-grid">
       <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveler.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-           HOW IT WORKS PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     HOW IT WORKS PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-howitworks">
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <div class="section-label">The Process</div>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">The Process</div>
       <h1>How It <em>Works</em></h1>
-      <p>Simple, stress-free, and completely tailored to you. Here's exactly how we bring your trip to life.</p>
+      <p>Simple, honest, and completely tailored to you. Here's exactly how we bring your trip to life.</p>
     </div>
   </div>
-  <div style="max-width:1100px;margin:0 auto;padding:90px 48px">
-    <div class="hiw" style="padding:0">
-      <div class="hiw-left reveal-left">
-        <div class="section-label">Step by Step</div>
-        <h2 class="section-title">From First Message to <em>Dream Trip</em></h2>
-        <p>We've refined a simple process that gets you from "I want to travel" to boarding your flight — with zero stress in between.</p>
-        <button class="btn-primary" onclick="showPage('booking')" style="margin-top:8px">Start the Process</button>
+
+  <div class="hiw-page">
+    <div class="hiw-steps">
+      <div class="hiw-page-step sr up">
+        <div class="hiw-step-num">1</div>
+        <div class="hiw-step-content">
+          <h3>Share your travel details</h3>
+          <p>Submit your request through our form. Tell us your destination, travel dates, group size, budget, and any specific preferences — including kosher requirements, accommodations, or special experiences you have in mind.</p>
+        </div>
       </div>
-      <div class="hiw-right">
-        <div class="hiw-step reveal delay-1">
-          <div class="step-indicator"><div class="step-circle">1</div><div class="step-line"></div></div>
-          <div class="step-content"><h3>Share Your Travel Details</h3><p>Submit your request through our Get Started form. Tell us your destination, travel dates, group size, budget, and any specific preferences — including kosher requirements, accommodations, or special experiences.</p></div>
+      <div class="hiw-page-step sr up d1">
+        <div class="hiw-step-num">2</div>
+        <div class="hiw-step-content">
+          <h3>We design your trip</h3>
+          <p>We research and curate a personalised travel plan — flights, hotels, kosher dining options, transfers, and logistics — all selected to match your preferences and travel style. A real person does this work.</p>
         </div>
-        <div class="hiw-step reveal delay-2">
-          <div class="step-indicator"><div class="step-circle">2</div><div class="step-line"></div></div>
-          <div class="step-content"><h3>We Design Your Trip</h3><p>We research and curate a personalized travel plan based on your needs — flights, hotels, kosher dining options, tours, and logistics — all selected to match your preferences and travel style.</p></div>
+      </div>
+      <div class="hiw-page-step sr up d2">
+        <div class="hiw-step-num">3</div>
+        <div class="hiw-step-content">
+          <h3>Review & refine</h3>
+          <p>You'll receive a custom proposal to review. We adjust until everything feels exactly right. Nothing gets booked without your full approval.</p>
         </div>
-        <div class="hiw-step reveal delay-3">
-          <div class="step-indicator"><div class="step-circle">3</div><div class="step-line"></div></div>
-          <div class="step-content"><h3>Review &amp; Refine</h3><p>You'll receive a custom proposal to review. We'll make any adjustments until everything feels exactly right. Nothing gets booked without your full approval.</p></div>
+      </div>
+      <div class="hiw-page-step sr up d3">
+        <div class="hiw-step-num">4</div>
+        <div class="hiw-step-content">
+          <h3>We handle everything</h3>
+          <p>Once approved, we handle all the bookings — flights, hotels, transfers, and any special arrangements — so you don't have to lift a finger.</p>
         </div>
-        <div class="hiw-step reveal delay-4">
-          <div class="step-indicator"><div class="step-circle">4</div><div class="step-line"></div></div>
-          <div class="step-content"><h3>We Handle Everything</h3><p>Once approved, we handle all the bookings on your behalf — flights, hotels, transfers, and any special arrangements — so you don't have to lift a finger.</p></div>
-        </div>
-        <div class="hiw-step reveal">
-          <div class="step-indicator"><div class="step-circle">5</div></div>
-          <div class="step-content"><h3>Receive Your Digital Itinerary</h3><p>You'll receive a beautiful, app-based digital itinerary with all your confirmations organized in one place — accessible before and throughout your journey.</p></div>
+      </div>
+      <div class="hiw-page-step sr up d4">
+        <div class="hiw-step-num">5</div>
+        <div class="hiw-step-content">
+          <h3>Your digital itinerary arrives</h3>
+          <p>A beautiful app-based itinerary with all your confirmations in one organised place — accessible before and throughout your journey.</p>
         </div>
       </div>
     </div>
-    <div class="hiw-why-box reveal">
-      <h2>Why NexGen Bookings?</h2>
+
+    <div class="hiw-why sr up">
+      <h3>Why NexGen Bookings?</h3>
       <ul class="why-list">
-        <li><div class="why-check">✓</div>100% personalized — no cookie-cutter packages, ever</li>
+        <li><div class="why-check">✓</div>100% personalised — no cookie-cutter packages, ever</li>
         <li><div class="why-check">✓</div>Deep expertise in kosher travel requirements worldwide</li>
         <li><div class="why-check">✓</div>Transparent pricing with no hidden fees or surprises</li>
         <li><div class="why-check">✓</div>Real human support throughout your entire journey</li>
         <li><div class="why-check">✓</div>CLIA accredited travel agency — trusted and professional</li>
-        <li><div class="why-check">✓</div>Digital itinerary app included with every booking</li>
+        <li><div class="why-check">✓</div>Digital itinerary included with every booking</li>
       </ul>
     </div>
   </div>
+
   <footer>
     <div class="footer-grid">
       <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveler.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-              CONTACT PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     CONTACT PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-contact">
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <div class="section-label">Let's Talk</div>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Let's Talk</div>
       <h1>Get in <em>Touch</em></h1>
-      <p>Have a question or ready to start planning? We'd love to hear from you.</p>
+      <p>Have a question or ready to start planning? We'll get back to you within 24 hours.</p>
     </div>
   </div>
+
   <div class="contact-page">
-    <div class="contact-info reveal-left">
-      <div class="section-label">Contact Us</div>
-      <h2 class="section-title">We're Here to <em>Help</em></h2>
-      <p style="margin-top:14px">Whether you have a specific trip in mind or just want to explore options, reach out and we'll get back to you within 24 hours.</p>
+    <div class="contact-info">
+      <div class="section-label-sm sr fade">Contact Us</div>
+      <h2 class="sr up">We're here<br>to <em>help.</em></h2>
+      <p class="sr up d1">Whether you have a specific trip in mind or just want to explore options, reach out and we'll respond within 24 hours.</p>
       <div class="contact-methods">
-        <div class="contact-method">
-          <div class="contact-method-icon">✉️</div>
-          <div class="contact-method-text"><strong>Email</strong><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></div>
+        <div class="contact-method sr up d2">
+          <strong>Email</strong>
+          <a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a>
         </div>
-        <div class="contact-method">
-          <div class="contact-method-icon">⏱️</div>
-          <div class="contact-method-text"><strong>Response Time</strong><span>Within 24 hours</span></div>
+        <div class="contact-method sr up d3">
+          <strong>Response Time</strong>
+          <span>Within 24 hours</span>
         </div>
-        <div class="contact-method">
-          <div class="contact-method-icon">🌐</div>
-          <div class="contact-method-text"><strong>Agency</strong><span>CLIA Accredited Travel Agency</span></div>
+        <div class="contact-method sr up d4">
+          <strong>Agency Status</strong>
+          <span>CLIA Accredited Travel Agency</span>
         </div>
       </div>
     </div>
-    <div class="contact-form-wrap reveal-right">
+    <div class="contact-form-wrap sr up">
       <form onsubmit="handleContact(event)" style="display:flex;flex-direction:column;gap:0">
         <div class="form-row">
           <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name" required/></div>
@@ -1435,32 +1695,36 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <div class="form-group"><label>Email Address *</label><input type="email" placeholder="your@email.com" required/></div>
         <div class="form-group"><label>Subject</label><input type="text" placeholder="What's this about?"/></div>
         <div class="form-group"><label>Message *</label><textarea placeholder="Tell us how we can help..." required></textarea></div>
-        <button type="submit" class="btn-primary" style="align-self:flex-start;margin-top:8px">Send Message</button>
+        <button type="submit" class="btn-ink" style="align-self:flex-start;margin-top:8px">
+          <span>Send Message</span><span class="arrow">→</span>
+        </button>
       </form>
     </div>
   </div>
+
   <footer>
     <div class="footer-grid">
       <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveler.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('howitworks')">How It Works</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-              BOOKING PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     BOOKING PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-booking">
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <div class="section-label">Plan Your Trip</div>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-eyebrow">Plan Your Trip</div>
       <h1>Let's Get <em>Started</em></h1>
-      <p>Fill out the form below and we'll craft a personalized proposal within 24 hours.</p>
+      <p>Fill out the form below and we'll craft a personalised proposal within 24 hours.</p>
     </div>
   </div>
+
   <div class="booking-page">
     <div id="bookingFormWrap">
       <div class="form-steps">
@@ -1468,7 +1732,6 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <div class="form-step-tab" id="tab2">2. Trip Info</div>
         <div class="form-step-tab" id="tab3">3. Preferences</div>
       </div>
-      <!-- Step 1 -->
       <div class="form-panel active" id="panel1">
         <div class="form-row">
           <div class="form-group"><label>First Name *</label><input type="text" id="f-fname" placeholder="Your first name" required/></div>
@@ -1478,7 +1741,6 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <div class="form-group"><label>Phone Number</label><input type="tel" id="f-phone" placeholder="+1 (000) 000-0000"/></div>
         <div class="form-actions"><button type="button" class="btn-form-next" onclick="nextStep(1)">Next Step →</button></div>
       </div>
-      <!-- Step 2 -->
       <div class="form-panel" id="panel2">
         <div class="form-group"><label>Destination(s) *</label><input type="text" id="f-dest" placeholder="Where would you like to go?" required/></div>
         <div class="form-row">
@@ -1488,11 +1750,8 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <div class="form-group"><label>Budget Range</label>
           <select id="f-budget">
             <option value="">Select a range</option>
-            <option>Under $3,000</option>
-            <option>$3,000 – $6,000</option>
-            <option>$6,000 – $10,000</option>
-            <option>$10,000 – $20,000</option>
-            <option>$20,000+</option>
+            <option>Under $3,000</option><option>$3,000 – $6,000</option>
+            <option>$6,000 – $10,000</option><option>$10,000 – $20,000</option><option>$20,000+</option>
           </select>
         </div>
         <div class="form-actions">
@@ -1500,7 +1759,6 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
           <button type="button" class="btn-form-next" onclick="nextStep(2)">Next Step →</button>
         </div>
       </div>
-      <!-- Step 3 -->
       <div class="form-panel" id="panel3">
         <div class="form-group"><label>Kosher Requirements</label>
           <div class="radio-row">
@@ -1512,50 +1770,48 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
         <div class="form-group"><label>Travel Style</label>
           <select id="f-style">
             <option value="">Select style</option>
-            <option>Luxury & Premium</option>
-            <option>Comfortable Mid-Range</option>
-            <option>Budget-Conscious</option>
-            <option>Family & Kid-Friendly</option>
-            <option>Honeymoon / Romantic</option>
-            <option>Adventure & Active</option>
+            <option>Luxury & Premium</option><option>Comfortable Mid-Range</option>
+            <option>Budget-Conscious</option><option>Family & Kid-Friendly</option>
+            <option>Honeymoon / Romantic</option><option>Adventure & Active</option>
           </select>
         </div>
-        <div class="form-group"><label>Additional Notes or Requests</label><textarea id="f-notes" placeholder="Special occasions, accessibility needs, must-see experiences, anything else..."></textarea></div>
+        <div class="form-group"><label>Additional Notes</label><textarea id="f-notes" placeholder="Special occasions, accessibility needs, must-see experiences..."></textarea></div>
         <div class="form-actions">
           <button type="button" class="btn-form-back" onclick="prevStep(3)">← Back</button>
-          <button type="button" class="btn-form-next" onclick="submitBooking()" style="background:var(--gold)">Submit Request ✓</button>
+          <button type="button" class="btn-form-next" onclick="submitBooking()">Submit Request ✓</button>
         </div>
       </div>
     </div>
     <div class="form-success" id="bookingSuccess" style="display:none">
       <div class="form-success-icon">✈️</div>
-      <h3>We've Got Your Request!</h3>
-      <p>Thank you — we'll review your travel details and reach out within 24 hours with a personalized proposal. Get ready for an incredible trip.</p>
+      <h3>We've Got Your Request</h3>
+      <p>Thank you — we'll review your details and reach out within 24 hours with a personalised proposal. Get ready for an incredible trip.</p>
     </div>
   </div>
+
   <footer>
     <div class="footer-grid">
       <div class="footer-brand"><img src="nexgen-logo-square.png" alt="NexGen"/><p>Kosher travel concierge for the modern Jewish traveler.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('destinations')">Destinations</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li><li><a onclick="showPage('terms')">Terms</a></li><li><a onclick="showPage('privacy')">Privacy</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span><div class="footer-bottom-links"><a onclick="showPage('terms')">Terms</a><a onclick="showPage('privacy')">Privacy</a></div></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-              TERMS PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     TERMS PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-terms">
-  <div class="page-hero" style="padding:130px 48px 60px">
-    <div class="page-hero-content">
-      <h1 style="font-size:clamp(2rem,4vw,3.5rem)">Terms & <em>Conditions</em></h1>
+  <div class="page-header" style="padding:140px 56px 60px">
+    <div class="page-header-inner">
+      <h1>Terms & <em>Conditions</em></h1>
     </div>
   </div>
   <div class="legal-page">
     <p class="legal-date">Last updated: January 2025</p>
-    <p>By using the NexGen Bookings website and services, you agree to the following terms. Please read them carefully.</p>
+    <p>By using the NexGen Bookings website and services, you agree to the following terms.</p>
     <h2>Services</h2>
     <p>NexGen Bookings provides travel planning, booking, and concierge services. All trips are custom-planned based on client preferences and are subject to availability from third-party suppliers.</p>
     <h2>Bookings & Payments</h2>
@@ -1565,31 +1821,27 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
     <h2>Liability</h2>
     <p>NexGen Bookings acts as an agent for airlines, hotels, and other travel suppliers. We are not liable for changes, cancellations, or interruptions caused by suppliers or force majeure events.</p>
     <h2>Contact</h2>
-    <p>For questions about these terms, contact us at <a href="mailto:info@nexgenbookings.com" style="color:var(--gold)">info@nexgenbookings.com</a>.</p>
+    <p>For questions: <a href="mailto:info@nexgenbookings.com" style="color:var(--ink);text-decoration:underline">info@nexgenbookings.com</a></p>
   </div>
   <footer>
-    <div class="footer-grid">
-      <div class="footer-brand"><p>Nexgen Bookings LLC &mdash; Independent Travel Advisor</p></div>
-      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div>
-    </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span></div>
+    <div class="footer-grid"><div class="footer-brand"><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('privacy')">Privacy Policy</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span></div>
   </footer>
 </div>
 
 
-<!-- ═══════════════════════════════════════
-              PRIVACY PAGE
-═══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════
+     PRIVACY PAGE
+════════════════════════════════════ -->
 <div class="page" id="page-privacy">
-  <div class="page-hero" style="padding:130px 48px 60px">
-    <div class="page-hero-content">
-      <h1 style="font-size:clamp(2rem,4vw,3.5rem)">Privacy <em>Policy</em></h1>
+  <div class="page-header" style="padding:140px 56px 60px">
+    <div class="page-header-inner">
+      <h1>Privacy <em>Policy</em></h1>
     </div>
   </div>
   <div class="legal-page">
     <p class="legal-date">Last updated: January 2025</p>
-    <p>NexGen Bookings is committed to protecting your privacy. This policy explains how we collect, use, and safeguard your information.</p>
+    <p>NexGen Bookings is committed to protecting your privacy.</p>
     <h2>Information We Collect</h2>
     <p>We collect information you provide directly — such as your name, email, phone number, and travel preferences — when you submit a request through our website.</p>
     <h2>How We Use Your Information</h2>
@@ -1597,78 +1849,78 @@ footer{background:var(--navy);color:rgba(255,255,255,0.65);padding:64px 48px 36p
     <h2>Data Security</h2>
     <p>We take reasonable steps to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
     <h2>Contact</h2>
-    <p>For privacy questions, contact us at <a href="mailto:info@nexgenbookings.com" style="color:var(--gold)">info@nexgenbookings.com</a>.</p>
+    <p>For privacy questions: <a href="mailto:info@nexgenbookings.com" style="color:var(--ink);text-decoration:underline">info@nexgenbookings.com</a></p>
   </div>
   <footer>
-    <div class="footer-grid">
-      <div class="footer-brand"><p>Nexgen Bookings LLC &mdash; Independent Travel Advisor</p></div>
-      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms & Conditions</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div>
-    </div>
-    <div class="footer-bottom"><span>&copy; 2025 Nexgen Bookings LLC</span></div>
+    <div class="footer-grid"><div class="footer-brand"><p>Nexgen Bookings LLC — Independent Travel Advisor</p></div><div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('terms')">Terms & Conditions</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li></ul></div></div>
+    <div class="footer-bottom"><span>© 2025 Nexgen Bookings LLC</span></div>
   </footer>
 </div>
 
 
 <script>
-/* ─── PAGE NAVIGATION w/ TRANSITION ─── */
+/* ─── PAGE NAVIGATION ─── */
 let currentPage = 'home';
-let isTransitioning = false;
+let busy = false;
+
+const darkPages = ['about','destinations','howitworks','contact','booking','terms','privacy'];
 
 function showPage(name) {
-  if (name === currentPage || isTransitioning) return;
-  isTransitioning = true;
+  if (name === currentPage || busy) return;
+  busy = true;
 
-  const overlay = document.getElementById('page-transition');
-
-  // Phase 1: sweep IN (cover screen)
-  overlay.classList.remove('out');
-  overlay.classList.add('in');
+  const pt = document.getElementById('pt');
+  pt.classList.add('in');
 
   setTimeout(() => {
-    // Swap content while covered
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-links a[id^="nav-"]').forEach(a => a.classList.remove('active'));
 
     const page = document.getElementById('page-' + name);
     if (page) { page.classList.add('active'); window.scrollTo({top:0,behavior:'instant'}); }
 
-    const navLink = document.getElementById('nav-' + name);
-    if (navLink) navLink.classList.add('active');
+    const link = document.getElementById('nav-' + name);
+    if (link) link.classList.add('active');
 
     currentPage = name;
-    const nav = document.getElementById('navbar');
-    if (name === 'home') {
-      nav.classList.remove('light');
-      if (window.scrollY < 60) nav.classList.remove('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-      nav.classList.add('light');
-    }
+    updateNav();
+    initReveal();
+    initTilt();
 
-    triggerReveal();
-
-    // Phase 2: sweep OUT (reveal new page)
-    overlay.classList.remove('in');
-    overlay.classList.add('out');
-
-    setTimeout(() => {
-      overlay.classList.remove('out');
-      isTransitioning = false;
-    }, 460);
-
-  }, 460);
+    pt.classList.remove('in');
+    pt.classList.add('out');
+    setTimeout(() => { pt.classList.remove('out'); busy = false; }, 520);
+  }, 500);
 }
 
-/* ─── NAVBAR SCROLL ─── */
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  if (currentPage === 'home') {
-    if (window.scrollY > 60) { nav.classList.add('scrolled'); nav.classList.remove('light'); }
-    else { nav.classList.remove('scrolled'); }
+/* ─── NAV STATE ─── */
+function updateNav() {
+  const nav = document.getElementById('nav');
+  const onDark = darkPages.includes(currentPage);
+  nav.classList.remove('scrolled','dark-page');
+  if (onDark) {
+    nav.classList.add('dark-page');
+  } else if (window.scrollY > 60) {
+    nav.classList.add('scrolled');
   }
-  const btt = document.getElementById('backToTop');
-  window.scrollY > 400 ? btt.classList.add('show') : btt.classList.remove('show');
+}
+
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  if (!darkPages.includes(currentPage)) {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }
+  const btt = document.getElementById('btt');
+  btt.classList.toggle('show', window.scrollY > 400);
+
+  // Parallax vision image
+  const vImg = document.getElementById('visionImg');
+  if (vImg) {
+    const rect = vImg.closest('.section-05-img').getBoundingClientRect();
+    if (rect.bottom > 0 && rect.top < window.innerHeight) {
+      vImg.style.transform = `translateY(${rect.top * 0.12}px)`;
+    }
+  }
 }, { passive: true });
 
 /* ─── MOBILE MENU ─── */
@@ -1677,173 +1929,136 @@ function toggleMenu() {
   document.getElementById('hamburger').classList.toggle('open');
 }
 
-/* ─── HERO SLIDESHOW ─── */
-let heroIdx = 0;
-const heroSlides = document.querySelectorAll('.hero-slide');
-const dotContainer = document.getElementById('slideDots');
-heroSlides.forEach((_,i) => {
-  const d = document.createElement('div');
-  d.className = 'slide-dot' + (i===0?' active':'');
-  d.onclick = () => goHeroSlide(i);
-  dotContainer.appendChild(d);
-});
-function goHeroSlide(idx) {
-  heroSlides[heroIdx].classList.remove('active');
-  document.querySelectorAll('.slide-dot')[heroIdx].classList.remove('active');
-  heroIdx = idx;
-  heroSlides[heroIdx].classList.add('active');
-  document.querySelectorAll('.slide-dot')[heroIdx].classList.add('active');
-}
-setInterval(() => goHeroSlide((heroIdx+1) % heroSlides.length), 5000);
-
-/* ─── DESTINATIONS CAROUSEL ─── */
-let destPos = 0;
-function slideDestinations(dir) {
-  const track = document.getElementById('destTrack');
-  const card = track.querySelector('.dest-card');
-  const cardW = card.offsetWidth + 20;
-  const maxCards = track.children.length;
-  const visibleCards = Math.floor(track.parentElement.offsetWidth / cardW);
-  const maxPos = Math.max(0, maxCards - visibleCards);
-  destPos = Math.max(0, Math.min(destPos + dir, maxPos));
-  track.style.transform = `translateX(-${destPos * cardW}px)`;
-}
-
-/* ─── TESTIMONIALS (3-up with progress bars) ─── */
-(function() {
-  const track      = document.getElementById('testiTrack');
-  const cards      = document.querySelectorAll('.testi-card');
-  const progWrap   = document.getElementById('testiProgress');
-  const total      = cards.length;
-  let idx          = 0;
-  let autoTimer    = null;
-
-  // Detect cards visible at once based on viewport
-  function visibleCount() {
-    return window.innerWidth < 700 ? 1 : window.innerWidth < 1024 ? 2 : 3;
-  }
-
-  // Build progress bars
-  cards.forEach((_, i) => {
-    const bar  = document.createElement('div'); bar.className = 'testi-prog';
-    const fill = document.createElement('div'); fill.className = 'testi-prog-fill';
-    bar.appendChild(fill);
-    bar.addEventListener('click', () => goTesti(i));
-    progWrap.appendChild(bar);
+/* ─── SCROLL REVEAL ─── */
+const srObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target.dataset.count) animCount(e.target);
+      srObserver.unobserve(e.target);
+    }
   });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-  function goTesti(newIdx) {
-    idx = Math.max(0, Math.min(newIdx, total - visibleCount()));
-    const cardW = cards[0].getBoundingClientRect().width + 22;
-    track.style.transform = `translateX(-${idx * cardW}px)`;
-
-    // Progress bars
-    document.querySelectorAll('.testi-prog').forEach((b, i) => {
-      b.classList.remove('active');
-      b.querySelector('.testi-prog-fill').style.transition = 'none';
-      b.querySelector('.testi-prog-fill').style.width = i < idx ? '100%' : '0';
+function initReveal() {
+  setTimeout(() => {
+    document.querySelectorAll('.page.active .sr').forEach(el => {
+      el.classList.remove('visible');
+      srObserver.observe(el);
     });
-    // Trigger active bar animation on next frame
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const activeBar = progWrap.children[idx];
-        if (activeBar) activeBar.classList.add('active');
-      });
+  }, 60);
+}
+
+/* ─── 3D TILT ─── */
+function initTilt() {
+  document.querySelectorAll('.page.active .tilt-target').forEach(el => {
+    if (el._tilt) return;
+    el._tilt = true;
+    el.addEventListener('mouseenter', () => {
+      el.style.transition = 'transform 0.12s ease';
     });
-
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => goTesti(idx + 1 < total - visibleCount() + 1 ? idx + 1 : 0), 6000);
-  }
-
-  window.slideTesti = dir => goTesti(idx + dir);
-  window.addEventListener('resize', () => goTesti(idx));
-  goTesti(0);
-})();
-
-/* ─── 3D TILT CARDS ─── */
-function initTilt(selector) {
-  document.querySelectorAll(selector).forEach(card => {
-    card.style.transformStyle = 'preserve-3d';
-    card.style.willChange = 'transform';
-    card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s';
-
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.12s ease, box-shadow 0.3s';
-    });
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width  - 0.5;
       const y = (e.clientY - r.top)  / r.height - 0.5;
-      card.style.transform =
-        `perspective(900px) rotateY(${x * 11}deg) rotateX(${-y * 11}deg) translateZ(6px)`;
+      el.style.transform = `perspective(900px) rotateY(${x*9}deg) rotateX(${-y*9}deg) translateZ(4px)`;
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform 0.55s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s';
-      card.style.transform = '';
+    el.addEventListener('mouseleave', () => {
+      el.style.transition = 'transform 0.55s cubic-bezier(0.4,0,0.2,1)';
+      el.style.transform = '';
     });
   });
 }
 
 /* ─── COUNTER ANIMATION ─── */
-function animateCounter(el) {
+function animCount(el) {
   const target = parseInt(el.dataset.count);
   if (!target) return;
-  let start = 0;
-  const step = Math.ceil(target / 40);
-  const timer = setInterval(() => {
-    start = Math.min(start + step, target);
-    el.textContent = start + (el.nextElementSibling && el.nextElementSibling.textContent.includes('%') ? '' : '+');
-    if (start >= target) clearInterval(timer);
-  }, 35);
+  let n = 0;
+  const step = Math.ceil(target / 36);
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = n + (el.nextElementSibling?.textContent.includes('%') ? '' : '+');
+    if (n >= target) clearInterval(t);
+  }, 30);
 }
 
-/* ─── SCROLL REVEAL ─── */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      if (e.target.dataset.count) animateCounter(e.target);
-      revealObserver.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+/* ─── TESTIMONIALS ─── */
+(function() {
+  const rail  = document.getElementById('testiRail');
+  if (!rail) return;
+  const slides = rail.querySelectorAll('.testi-slide');
+  const wrap   = document.getElementById('testiProgressWrap');
+  const count  = document.getElementById('testiCount');
+  let idx = 0, timer = null;
+  const n = slides.length;
 
-function triggerReveal() {
-  setTimeout(() => {
-    document.querySelectorAll(
-      '.page.active .reveal, .page.active .reveal-left, .page.active .reveal-right, .page.active .reveal-scale'
-    ).forEach(el => {
-      el.classList.remove('visible');
-      revealObserver.observe(el);
+  // Build progress bars
+  for (let i = 0; i < n; i++) {
+    const b = document.createElement('div'); b.className = 'testi-bar';
+    const f = document.createElement('div'); f.className = 'testi-bar-fill';
+    b.appendChild(f);
+    b.addEventListener('click', () => go(i));
+    wrap.appendChild(b);
+  }
+
+  function slideW() {
+    const w = slides[0].getBoundingClientRect().width;
+    return w || (window.innerWidth < 860 ? window.innerWidth - 48 : window.innerWidth * 0.5);
+  }
+
+  function go(i) {
+    idx = ((i % n) + n) % n;
+    const gap = 2;
+    rail.style.transform = `translateX(-${idx * (slideW() + gap)}px)`;
+    count.textContent = String(idx + 1).padStart(2,'0') + ' / ' + String(n).padStart(2,'0');
+
+    const bars = wrap.querySelectorAll('.testi-bar');
+    bars.forEach((b, j) => {
+      b.classList.remove('active');
+      const f = b.querySelector('.testi-bar-fill');
+      f.style.transition = 'none';
+      f.style.transform = j < idx ? 'scaleX(1)' : 'scaleX(0)';
     });
-  }, 60);
-}
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      bars[idx]?.classList.add('active');
+    }));
 
-/* ─── DESTINATION FILTER ─── */
+    clearInterval(timer);
+    timer = setInterval(() => go(idx + 1), 5000);
+  }
+
+  window.moveTesti = dir => go(idx + dir);
+  window.addEventListener('resize', () => go(idx));
+  go(0);
+})();
+
+/* ─── HERO SLIDESHOW — removed, single image now ─── */
+
+/* ─── DESTINATIONS FILTER ─── */
 function filterDest(btn, region) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.dest-full-card').forEach(card => {
-    const show = region === 'all' || card.dataset.region === region;
-    card.style.display = show ? '' : 'none';
+  document.querySelectorAll('.dest-page-card').forEach(c => {
+    c.style.display = (region === 'all' || c.dataset.region === region) ? '' : 'none';
   });
 }
 
-/* ─── BOOKING FORM STEPS ─── */
-let currentStep = 1;
-function nextStep(step) {
-  document.getElementById('panel'+step).classList.remove('active');
-  document.getElementById('tab'+step).className = 'form-step-tab done';
-  currentStep = step + 1;
-  document.getElementById('panel'+currentStep).classList.add('active');
-  document.getElementById('tab'+currentStep).classList.add('active');
+/* ─── BOOKING FORM ─── */
+let step = 1;
+function nextStep(s) {
+  document.getElementById('panel'+s).classList.remove('active');
+  document.getElementById('tab'+s).className = 'form-step-tab done';
+  step = s + 1;
+  document.getElementById('panel'+step).classList.add('active');
+  document.getElementById('tab'+step).classList.add('active');
 }
-function prevStep(step) {
-  document.getElementById('panel'+step).classList.remove('active');
-  document.getElementById('tab'+step).className = 'form-step-tab';
-  currentStep = step - 1;
-  document.getElementById('panel'+currentStep).classList.add('active');
-  document.getElementById('tab'+currentStep).classList.add('active');
+function prevStep(s) {
+  document.getElementById('panel'+s).classList.remove('active');
+  document.getElementById('tab'+s).className = 'form-step-tab';
+  step = s - 1;
+  document.getElementById('panel'+step).classList.add('active');
+  document.getElementById('tab'+step).classList.add('active');
 }
 function submitBooking() {
   document.getElementById('bookingFormWrap').style.display = 'none';
@@ -1853,28 +2068,14 @@ function submitBooking() {
 /* ─── CONTACT FORM ─── */
 function handleContact(e) {
   e.preventDefault();
-  alert('Thank you for reaching out! We\'ll get back to you within 24 hours.');
+  alert('Thank you — we\'ll be in touch within 24 hours.');
   e.target.reset();
 }
 
-/* ─── PARALLAX ─── */
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  // Hero background parallax
-  const heroSlides = document.getElementById('heroSlides');
-  if (heroSlides) heroSlides.style.transform = `translateY(${y * 0.35}px)`;
-  // Vision section parallax
-  const visionBg = document.getElementById('visionBg');
-  if (visionBg) {
-    const rect = visionBg.parentElement.getBoundingClientRect();
-    visionBg.style.transform = `translateY(${rect.top * 0.25}px)`;
-  }
-}, { passive: true });
-
 /* ─── INIT ─── */
-triggerReveal();
-// Apply tilt to all interactive cards
-initTilt('.dest-card, .dest-full-card, .pillar, .value-card, .testi-inner, .hiw-why-box');
+updateNav();
+initReveal();
+initTilt();
 </script>
 </body>
 </html>

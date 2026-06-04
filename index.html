@@ -922,6 +922,8 @@ footer{
           <h4>Contact</h4>
           <ul>
             <li><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></li>
+            <li><a href="tel:+15167245435">+1 (516) 724-5435</a></li>
+            <li><a href="https://wa.me/15167245435" target="_blank" rel="noopener">WhatsApp</a></li>
             <li>CLIA Accredited Agency</li>
             <li><a onclick="showPage('terms')">Terms & Conditions</a></li>
             <li><a onclick="showPage('privacy')">Privacy Policy</a></li>
@@ -1155,8 +1157,10 @@ footer{
           <p class="sr up d1">Whether you have a specific trip in mind or just want to understand whether we're right for you, reach out. No obligation. Honest conversation.</p>
           <div class="contact-methods">
             <div class="c-method sr up d2"><strong>Email</strong><a href="mailto:info@nexgenbookings.com">info@nexgenbookings.com</a></div>
-            <div class="c-method sr up d3"><strong>Response time</strong><span>Within 24 hours</span></div>
-            <div class="c-method sr up d4"><strong>Accreditation</strong><span>CLIA Accredited Travel Agency</span></div>
+            <div class="c-method sr up d3"><strong>Phone</strong><a href="tel:+15167245435">+1 (516) 724-5435</a></div>
+            <div class="c-method sr up d4"><strong>WhatsApp</strong><a href="https://wa.me/15167245435" target="_blank" rel="noopener">Chat with us on WhatsApp →</a></div>
+            <div class="c-method sr up d5"><strong>Response time</strong><span>Within 24 hours</span></div>
+            <div class="c-method sr up d5"><strong>Accreditation</strong><span>CLIA Accredited Travel Agency</span></div>
           </div>
         </div>
         <div class="sr up d1">
@@ -1204,11 +1208,19 @@ footer{
     <p>Fill this out and we'll put together a personalised proposal within 24 hours.</p>
   </div>
 
-  <section class="section">
+  <section style="padding:40px 0 0">
     <div class="container">
       <div style="max-width:860px;margin:0 auto">
-        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" width="100%" height="600" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV"></iframe>
-        <script type="text/javascript">iFrameResize({checkOrigin:false, onInit: function() { document.getElementById("tj-form-gxKU9qiWgcEB6HkmYa6pvHsV").iFrameResizer.sendMessage({ origin: document.location.origin }); }});</script>
+        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" scrolling="no" width="100%" height="600" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV" style="display:block;overflow:hidden"></iframe>
+        <script type="text/javascript">
+          iFrameResize({
+            checkOrigin: false,
+            heightCalculationMethod: 'lowestElement',
+            onInit: function(iframe) {
+              iframe.iFrameResizer.sendMessage({ origin: document.location.origin });
+            }
+          }, '#tj-form-gxKU9qiWgcEB6HkmYa6pvHsV');
+        </script>
       </div>
     </div>
   </section>

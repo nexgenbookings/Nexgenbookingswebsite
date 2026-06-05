@@ -794,14 +794,7 @@ footer{
   .footer-bottom{flex-direction:column;align-items:flex-start}
   .cta-banner{padding:72px 0}
 }
-/* Safari desktop only — form renders shorter than Chrome */
-@media not all and (min-resolution:.001dpcm){
-  @supports (-webkit-appearance:none){
-    #tj-form-gxKU9qiWgcEB6HkmYa6pvHsV{height:400px!important}
-  }
-}
 @media(max-width:640px){
-  #tj-form-gxKU9qiWgcEB6HkmYa6pvHsV{height:2200px!important;width:100%!important}
   .features-grid{grid-template-columns:1fr}
   .dest-cards-grid{grid-template-columns:1fr}
   .dest-page-grid{grid-template-columns:1fr}
@@ -1449,9 +1442,15 @@ footer{
   <section style="padding:40px 0 60px">
     <div class="container">
       <div style="max-width:860px;margin:0 auto">
-        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" scrolling="no" width="100%" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV" style="display:block;overflow:hidden;width:100%;height:700px"></iframe>
+        <iframe src="https://traveljoy.com/webforms/D7e7odsGMu88EZt3U4RsTauP/forms/gxKU9qiWgcEB6HkmYa6pvHsV" frameBorder="0" scrolling="no" width="100%" height="700" id="tj-form-gxKU9qiWgcEB6HkmYa6pvHsV" style="display:block;overflow:hidden;width:100%"></iframe>
         <script type="text/javascript">
-          iFrameResize({ checkOrigin: false, autoResize: false }, '#tj-form-gxKU9qiWgcEB6HkmYa6pvHsV');
+          iFrameResize({
+            checkOrigin: false,
+            heightCalculationMethod: 'lowestElement',
+            onInit: function(iframe) {
+              iframe.iFrameResizer.sendMessage({ origin: document.location.origin });
+            }
+          }, '#tj-form-gxKU9qiWgcEB6HkmYa6pvHsV');
         </script>
       </div>
     </div>

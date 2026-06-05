@@ -157,15 +157,19 @@ nav.inner-top .nav-links a:hover,nav.inner-top .nav-links a.active{color:#fff;op
 nav.inner-top .nav-book{color:#fff;border-color:rgba(255,255,255,.4)}
 nav.inner-top .nav-book:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.65)}
 nav.inner-top .hamburger span{background:#fff}
-nav.inner-top .nav-logo img.logo-color{display:block}
-nav.inner-top .nav-logo img.logo-white{display:none}
+nav.inner-top .nav-logo img.logo-dark{display:block}
+nav.inner-top .nav-logo img.logo-light{display:none}
 .nav-logo img{height:56px;transition:height .35s;display:block}
-.nav-logo img.logo-color{}
-.nav-logo img.logo-white{display:none}
+/* Default: show dark logo (for dark bg), hide light logo */
+.nav-logo img.logo-dark{display:block}
+.nav-logo img.logo-light{display:none}
+/* White nav: show light logo, hide dark logo */
+nav.scrolled .nav-logo img.logo-dark,nav.page-nav .nav-logo img.logo-dark{display:none}
+nav.scrolled .nav-logo img.logo-light,nav.page-nav .nav-logo img.logo-light{display:block}
 nav.scrolled .nav-logo img,nav.page-nav .nav-logo img{height:44px}
 /* Hero — show color logo */
-nav.hero-nav .nav-logo img.logo-color{display:block}
-nav.hero-nav .nav-logo img.logo-white{display:none}
+nav.hero-nav .nav-logo img.logo-dark{display:block}
+nav.hero-nav .nav-logo img.logo-light{display:none}
 
 .nav-links{display:flex;align-items:center;gap:36px}
 .nav-links a{
@@ -818,8 +822,8 @@ footer{
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
-    <img src="nexgen-logo.png" alt="NexGen Bookings" class="logo-color"/>
-    <img src="nexgen-logo-white.png" alt="NexGen Bookings" class="logo-white"/>
+    <img src="nexgen-logo.png" alt="NexGen Bookings" class="logo-dark"/>
+    <img src="nexgen-logo-onwhite.png" alt="NexGen Bookings" class="logo-light"/>
   </div>
   <div class="nav-links">
     <a onclick="showPage('home')" id="nav-home" class="active">Home</a>

@@ -794,6 +794,12 @@ footer{
   .footer-bottom{flex-direction:column;align-items:flex-start}
   .cta-banner{padding:72px 0}
 }
+/* Safari desktop only — form renders shorter than Chrome */
+@media not all and (min-resolution:.001dpcm){
+  @supports (-webkit-appearance:none){
+    #tj-form-gxKU9qiWgcEB6HkmYa6pvHsV{height:400px!important}
+  }
+}
 @media(max-width:640px){
   #tj-form-gxKU9qiWgcEB6HkmYa6pvHsV{height:2200px!important;width:100%!important}
   .features-grid{grid-template-columns:1fr}
